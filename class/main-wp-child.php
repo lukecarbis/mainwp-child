@@ -885,7 +885,7 @@ class Main_WP_Child
         Main_WP_Child_Branding::instance()->branding_init();
         Main_WP_Client_Report::Instance()->creport_init();
         Main_WP_Child_Pagespeed::Instance()->init();        
-        Main_WP_Child_Links_Checker::Instance()->init();
+        Main_WP_Child_Links_Checker::instance()->init();
         Main_WP_Child_Wordfence::Instance()->wordfence_init();        
         Main_WP_Child_iThemes_Security::instance()->ithemes_init();
     }
@@ -4215,7 +4215,7 @@ class Main_WP_Child
     }
     
     function links_checker() {        
-        Main_WP_Child_Links_Checker::Instance()->action();                
+        Main_WP_Child_Links_Checker::instance()->action();
     }
     
     function wordfence() {        
