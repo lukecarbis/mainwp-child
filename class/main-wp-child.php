@@ -887,7 +887,7 @@ class Main_WP_Child
         Main_WP_Child_Pagespeed::Instance()->init();        
         Main_WP_Child_Links_Checker::Instance()->init();
         Main_WP_Child_Wordfence::Instance()->wordfence_init();        
-        Main_WP_Child_iThemes_Security::Instance()->ithemes_init();
+        Main_WP_Child_iThemes_Security::instance()->ithemes_init();
     }
 
     function default_option_active_plugins($default)
@@ -4223,7 +4223,7 @@ class Main_WP_Child
     }
 
     function ithemes() {
-        Main_WP_Child_iThemes_Security::Instance()->action();
+        Main_WP_Child_iThemes_Security::instance()->action();
     }
 
 
