@@ -1,8 +1,12 @@
 <?php
-if (class_exists('MainWP_WP_Stream_Connector')) {
-    class Main_WP_Child_Reports_Connector_Backups extends MainWP_WP_Stream_Connector   
-    {   
+if ( ! class_exists( 'MainWP_WP_Stream_Connector' ) ) {
+	return;
+}
 
+/**
+ * Class Main_WP_Child_Reports_Connector_Backups
+ */
+class Main_WP_Child_Reports_Connector_Backups extends MainWP_WP_Stream_Connector {
 	/**
 	 * Connector slug
 	 *
@@ -16,7 +20,7 @@ if (class_exists('MainWP_WP_Stream_Connector')) {
 	 * @var array
 	 */
 	public static $actions = array(
-            'mainwp_backup',		
+		'mainwp_backup',
 	);
 
 	/**
@@ -25,7 +29,7 @@ if (class_exists('MainWP_WP_Stream_Connector')) {
 	 * @return string Translated connector label
 	 */
 	public static function get_label() {
-            return __( 'MainWP Backups', 'default' );                
+		return __( 'MainWP Backups', 'default' );
 	}
 
 	/**
@@ -34,9 +38,9 @@ if (class_exists('MainWP_WP_Stream_Connector')) {
 	 * @return array Action label translations
 	 */
 	public static function get_action_labels() {
-            return array(
-                'mainwp_backup'    => __( 'Backup', 'default' ),			
-            );
+		return array(
+			'mainwp_backup' => __( 'Backup', 'default' ),
+		);
 	}
 
 	/**
@@ -45,9 +49,9 @@ if (class_exists('MainWP_WP_Stream_Connector')) {
 	 * @return array Context label translations
 	 */
 	public static function get_context_labels() {
-            return array(
-                'mainwp_backups' => __( 'MainWP Backups', 'mainwp-child' ),
-            );
+		return array(
+			'mainwp_backups' => __( 'MainWP Backups', 'mainwp-child' ),
+		);
 	}
 
 	/**
@@ -59,19 +63,23 @@ if (class_exists('MainWP_WP_Stream_Connector')) {
 	 * @return array             Action links
 	 */
 	public static function action_links( $links, $record ) {
-            if (isset($record->object_id)) {
-            }
-            return $links;
+		unset( $record );
+		return $links;
 	}
 
-        public static function callback_mainwp_backup($destination, $message, $size, $status, $type) {                                                
-            self::log(
-                $message,
-                compact('destination', 'status', 'type', 'size'),
-                0,
-                array( 'mainwp_backups' => 'mainwp_backup' )
-            );
-        }
-    }
+	/**
+	 * @param $destination
+	 * @param $message
+	 * @param $size
+	 * @param $status
+	 * @param $type
+	 */
+	public static function callback_mainwp_backup( $destination, $message, $size, $status, $type ) {
+		self::log(
+			$message,
+			compact( 'destination', 'status', 'type', 'size' ),
+			0,
+			array( 'mainwp_backups' => 'mainwp_backup' )
+		);
+	}
 }
-
