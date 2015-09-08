@@ -2031,7 +2031,7 @@ class Main_WP_Child
                             $_POST['file_descriptors'] = 1000;
                         }
                         $_POST['file_descriptors_auto'] = 0;
-                        $_POST['loadFilesBeforeZip'] = false;
+                        $_POST['load_files_before_zip'] = false;
                     }
                 }
             }
@@ -2047,7 +2047,7 @@ class Main_WP_Child
                 }
             }
 
-            $loadFilesBeforeZip = (isset($_POST['loadFilesBeforeZip']) ? $_POST['loadFilesBeforeZip'] : true);
+            $loadFilesBeforeZip = (isset($_POST['load_files_before_zip']) ? $_POST['load_files_before_zip'] : true);
 
             $newExcludes = array();
             foreach ($excludes as $exclude)
