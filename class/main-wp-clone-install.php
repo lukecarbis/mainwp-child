@@ -603,7 +603,7 @@ class Main_WP_Clone_Install
         global $wp_filesystem;
 
         //First check if there is a database backup in the zip file, these can be very large and the wordpress unzip_file can not handle these!
-//        if ($this->checkZipSupport())
+//        if ($this->check_zip_support())
 //        {
 //             return $this->extractZipBackup();
 //            $zip = new ZipArchive();

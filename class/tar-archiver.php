@@ -1,6 +1,7 @@
 <?php
 
 //todo: BZ2; support fseek!
+// @TODO: Use less generic class name
 
 class Tar_Archiver
 {
@@ -176,7 +177,7 @@ class Tar_Archiver
 
             if (!$append || !file_exists(dirname($filepath) . DIRECTORY_SEPARATOR . 'dbBackup.sql'))
             {
-                $this->backup->createBackupDB(dirname($filepath) . DIRECTORY_SEPARATOR . 'dbBackup.sql', false, $this);
+                $this->backup->create_backup_db(dirname($filepath) . DIRECTORY_SEPARATOR . 'dbBackup.sql', false, $this);
             }
             $this->addFile(dirname($filepath) . DIRECTORY_SEPARATOR . 'dbBackup.sql', basename(WP_CONTENT_DIR) . '/' . 'dbBackup.sql');
             if (file_exists(ABSPATH . '.htaccess')) $this->addFile(ABSPATH . '.htaccess', 'mainwp-htaccess');

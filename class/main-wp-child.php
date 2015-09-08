@@ -587,7 +587,7 @@ class Main_WP_Child
                 $method = (!isset($_POST['zipmethod']) ? 'tar.gz' : $_POST['zipmethod']);
                 if ($method == 'tar.gz' && !function_exists('gzopen')) $method = 'zip';
 
-                $res = Main_WP_Backup::get()->createFullBackup($newExcludes, (isset($_POST['f']) ? $_POST['f'] : $_POST['file']), true, $includeCoreFiles, 0, false, false, false, false, $method);
+                $res = Main_WP_Backup::get()->create_full_backup($newExcludes, (isset($_POST['f']) ? $_POST['f'] : $_POST['file']), true, $includeCoreFiles, 0, false, false, false, false, $method);
                 if (!$res)
                 {
                     $information['backup'] = false;
@@ -2146,7 +2146,7 @@ class Main_WP_Child
 
             $append = (isset($_POST['append']) && ($_POST['append'] == '1'));
 
-            $res = Main_WP_Backup::get()->createFullBackup($newExcludes, $fileName, true, true, $file_descriptors, $file, $excludezip, $excludenonwp, $loadFilesBeforeZip, $ext, $pid, $append);
+            $res = Main_WP_Backup::get()->create_full_backup($newExcludes, $fileName, true, true, $file_descriptors, $file, $excludezip, $excludenonwp, $loadFilesBeforeZip, $ext, $pid, $append);
             if (!$res)
             {
                 $information['full'] = false;
@@ -2214,7 +2214,7 @@ class Main_WP_Child
             @unlink($filepath);
         }
 
-        $result = Main_WP_Backup::get()->createBackupDB($filepath, $ext);
+        $result = Main_WP_Backup::get()->create_backup_db($filepath, $ext);
 
         Main_WP_Helper::update_option('mainwp_child_last_db_backup_size', filesize($result['filepath']));
 
