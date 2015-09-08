@@ -884,7 +884,7 @@ class Main_WP_Child
         // Branding extension
         Main_WP_Child_Branding::instance()->branding_init();
         Main_WP_Client_Report::Instance()->creport_init();
-        Main_WP_Child_Pagespeed::Instance()->init();        
+        Main_WP_Child_Pagespeed::instance()->init();
         Main_WP_Child_Links_Checker::instance()->init();
         Main_WP_Child_Wordfence::Instance()->wordfence_init();        
         Main_WP_Child_iThemes_Security::instance()->ithemes_init();
@@ -4188,7 +4188,7 @@ class Main_WP_Child
     }
     
     function page_speed() {        
-        Main_WP_Child_Pagespeed::Instance()->action();                
+        Main_WP_Child_Pagespeed::instance()->action();
     }
       
     function woo_com_status() {        
