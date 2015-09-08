@@ -339,7 +339,7 @@ class Main_WP_Child_Back_Up_WordPress {
 	}
 
 	/**
-	 * @param $schedule
+	 * @param $schedule HM\BackUpWordPress\Scheduled_Backup
 	 *
 	 * @return string
 	 */

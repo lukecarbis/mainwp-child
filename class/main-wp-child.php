@@ -856,7 +856,7 @@ class Main_WP_Child
         
         Main_WP_Child_WP_Rocket::Instance()->init();
              
-        Main_WP_Child_Back_WP_Up::Instance()->init();
+        Main_WP_Child_Back_WP_Up::instance()->init();
       
             //Call the function required
         if ($auth && isset($_POST['function']) && isset($this->callableFunctions[$_POST['function']]))
@@ -4244,7 +4244,7 @@ class Main_WP_Child
     }
 
     function backwpup() {
-        Main_WP_Child_Back_WP_Up::Instance()->action();
+        Main_WP_Child_Back_WP_Up::instance()->action();
     }
     
   
