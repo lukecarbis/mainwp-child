@@ -95,7 +95,7 @@ class Main_WP_Child_Back_WP_Up {
 			);
 			if ( isset( $error['type'] ) && E_ERROR === $error['type'] && isset( $error['message'] ) ) {
 				die( wp_kses( '<mainwp>' . base64_encode( serialize( array( 'error' => 'Main_WP_Child fatal error : ' . $error['message'] . ' Line: ' . $error['line'] . ' File: ' . $error['file'] ) ) ) . '</mainwp>', $allowed_html ) );
-			} else if ( ! empty (Main_WP_Child_Back_WP_Up::$information ) ) {
+			} else if ( ! empty( Main_WP_Child_Back_WP_Up::$information ) ) {
 				die( wp_kses( '<mainwp>' . base64_encode( serialize( Main_WP_Child_Back_WP_Up::$information ) ) . '</mainwp>', $allowed_html ) );
 			} else {
 				die( wp_kses( '<mainwp>' . base64_encode( array( 'error' => 'Missing information array inside fatal_error' ) ) . '</mainwp>', $allowed_html ) );
@@ -580,7 +580,9 @@ class Main_WP_Child_Back_WP_Up {
 					if ( 'wpcron' === BackWPup_Option::get( $val, 'activetype' ) ) {
 						if ( $nextrun = wp_next_scheduled( 'backwpup_cron', array( 'id' => $val ) ) + ( get_option( 'gmt_offset' ) * 3600 )  ) {
 							$temp_array['nextrun'] = sprintf( __( '%1$s at %2$s by WP-Cron', 'backwpup' ) , date_i18n( get_option( 'date_format' ), $nextrun, true ) , date_i18n( get_option( 'time_format' ), $nextrun, true ) );
-						} else { 							$temp_array['nextrun'] = __( 'Not scheduled!', 'backwpup' ); }
+						} else {
+							$temp_array['nextrun'] = __( 'Not scheduled!', 'backwpup' );
+						}
 					} else {
 						$temp_array['nextrun'] = __( 'Inactive', 'backwpup' );
 					}
@@ -605,8 +607,8 @@ class Main_WP_Child_Back_WP_Up {
 					$temp_array['downloadurl'] = str_replace( array( '&amp;', network_admin_url( 'admin.php' ).'?page=backwpupbackups&action=' ), array( '&', admin_url( 'admin-ajax.php' ).'?action=mainwp_backwpup_download_backup&type=' ), $temp_array['downloadurl'].'&_wpnonce='.$this->create_nonce_without_session( 'mainwp_download_backup' ) );
 					$temp_array['website_id']  = $website_id;
 
-					if ( ! isset($without_dupes[ $temp_array['file'] ]) ) {
-						$array[]                   = $temp_array;
+					if ( ! isset( $without_dupes[ $temp_array['file'] ] ) ) {
+						$array[] = $temp_array;
 						$without_dupes[ $temp_array['file'] ] = 1;
 					}
 				}
@@ -637,12 +639,12 @@ class Main_WP_Child_Back_WP_Up {
 		if ( ! empty( $dest ) && strstr( $_GET['type'], 'download' ) ) {
 			$dest_class = BackWPup::get_destination( $dest );
 			if ( is_null( $dest_class ) ) {
-				die('-4');
+				die( '-4' );
 			}
 
 			$dest_class->file_download( (int) $_GET['jobid'], $_GET['file'] );
 		} else {
-			die('-5');
+			die( '-5' );
 		}
 
 		die();
@@ -721,6 +723,8 @@ class Main_WP_Child_Back_WP_Up {
 		 * @return string
 		 */
 		function mainwp_backwpup_wp_die_ajax_handler( $message ) {
+			// @TODO: $message is not used, remove
+			unset( $message );
 			return 'mainwp_backwpup_wp_die_ajax_handler';
 		}
 
@@ -823,8 +827,12 @@ class Main_WP_Child_Back_WP_Up {
 		}
 
 		if ( ! function_exists( 'add_screen_option' ) ) {
+			/**
+			 * @param $option
+			 * @param array $args
+			 */
 			function add_screen_option( $option, $args = array() ) {
-
+				// @TODO: Complete
 			}
 		}
 
@@ -939,6 +947,8 @@ class Main_WP_Child_Back_WP_Up {
 				$result = $emailer->send( $message );
 			} catch ( Exception $e ) {
 				$message = 'Swift Mailer: ' . $e->getMessage();
+				// @TODO: Use $message
+				unset( $message );
 			}
 
 			if ( isset( $mbEncoding ) ) {
@@ -1223,7 +1233,7 @@ class Main_WP_Child_Back_WP_Up {
 			BackWPup_Option::update( $job_id, 'dbdumpexclude', array() );
 		}
 
-		if ( isset( $settings['value']['dropboxtoken']) && isset($settings['value']['dropboxroot']) ) {
+		if ( isset( $settings['value']['dropboxtoken'] ) && isset( $settings['value']['dropboxroot'] ) ) {
 			BackWPup_Option::update( $job_id, 'dropboxtoken', $settings['value']['dropboxtoken'] );
 			BackWPup_Option::update( $job_id, 'dropboxroot', $settings['value']['dropboxroot'] );
 		}
@@ -1267,7 +1277,7 @@ class Main_WP_Child_Back_WP_Up {
 			return array( 'error' => __( 'Install BackWPup on child website', $this->plugin_translate ) );
 		}
 
-		if ( isset($settings['value']['is_premium']) && 1 === $settings['value']['is_premium'] && false === $this->is_backwpup_pro ) {
+		if ( isset( $settings['value']['is_premium'] ) && 1 === $settings['value']['is_premium'] && false === $this->is_backwpup_pro ) {
 			return array( 'error' => __( 'You try to use pro version settings in non pro plugin version. Please install pro version on child and try again.', $this->plugin_translate ) );
 		}
 

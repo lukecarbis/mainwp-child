@@ -25,6 +25,9 @@ class Main_WP_Backup {
 	protected $archiver = null;
 
 	// @TODO: Remove
+	/**
+	 * Construct
+	 */
 	protected function __construct() {
 
 	}
@@ -75,7 +78,9 @@ class Main_WP_Backup {
 		// Verify if another backup is running, if so, return an error
 		$files = glob( $backup_dir . '*.pid' );
 		foreach ( $files as $file ) {
-			if ( basename( $file ) === basename( $pid ) ) { continue; }
+			if ( basename( $file ) === basename( $pid ) ) {
+				continue;
+			}
 
 			if ( ( time() - filemtime( $file ) ) < 160 ) {
 				Main_WP_Helper::error( 'Another backup process is running, try again later' );
@@ -216,6 +221,8 @@ class Main_WP_Backup {
 	 * @return bool
 	 */
 	function _zip_file_console( $file, $archive ) {
+		unset( $file );
+		unset( $archive );
 		return false;
 	}
 
@@ -227,7 +234,7 @@ class Main_WP_Backup {
 	 */
 	public function _zip_file_pcl( $file, $archive ) {
 		//Zip this backup folder..
-		require_once ( ABSPATH . 'wp-admin/includes/class-pclzip.php');
+		require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
 		$this->zip = new PclZip( $archive );
 
 		$error = false;
@@ -354,8 +361,12 @@ class Main_WP_Backup {
 				/* @codingStandardsIgnoreStart */
 				$fh = @opendir( $dir );
 				while ( $entry = @readdir( $fh ) ) {
-					if ( ! @is_dir( $dir . $entry ) ) { continue; }
-					if ( ($entry == '.') || ($entry == '..') ) { continue; }
+					if ( ! @is_dir( $dir . $entry ) ) {
+						continue;
+					}
+					if ( ($entry == '.') || ($entry == '..') ) {
+						continue;
+					}
 					$plugins[] = $entry;
 				}
 				@closedir( $fh );
@@ -366,8 +377,12 @@ class Main_WP_Backup {
 				/* @codingStandardsIgnoreStart */
 				$fh = @opendir( $dir );
 				while ( $entry = @readdir( $fh ) ) {
-					if ( ! @is_dir( $dir . $entry ) ) { continue; }
-					if ( ($entry == '.') || ($entry == '..') ) { continue; }
+					if ( ! @is_dir( $dir . $entry ) ) {
+						continue;
+					}
+					if ( ($entry == '.') || ($entry == '..') ) {
+						continue;
+					}
 					$themes[] = $entry;
 				}
 				@closedir( $fh );
@@ -392,6 +407,7 @@ class Main_WP_Backup {
 
 			// @TODO: This variable is unused. Use it or remove it.
 			$return = $this->zip->close();
+			unset( $return );
 
 			/* @codingStandardsIgnoreStart */
 			@unlink( dirname( $file_path ) . DIRECTORY_SEPARATOR . 'dbBackup.sql' );
@@ -414,7 +430,7 @@ class Main_WP_Backup {
 	 * @return bool
 	 */
 	public function create_zip_pcl_full_backup( $file_path, $excludes, $add_config, $include_core_files ) {
-		require_once ( ABSPATH . 'wp-admin/includes/class-pclzip.php');
+		require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
 
 		$this->zip = new PclZip( $file_path );
 		$nodes = glob( ABSPATH . '*' );
@@ -525,6 +541,7 @@ class Main_WP_Backup {
 	 */
 	function copy_dir( $nodes, $excludes, $backup_folder, $exclude_non_wp, $root ) {
 		// @TODO: $root is not used - remove it
+		unset( $root );
 
 		if ( ! is_array( $nodes ) ) {
 			return;
@@ -549,7 +566,9 @@ class Main_WP_Backup {
 					$this->copy_dir( $new_nodes, $excludes, $backup_folder, $exclude_non_wp, false );
 					unset( $new_nodes );
 				} else if ( is_file( $node ) ) {
-					if ( $this->exclude_zip && Main_WP_Helper::endsWith( $node, '.zip' ) ) { continue; }
+					if ( $this->exclude_zip && Main_WP_Helper::endsWith( $node, '.zip' ) ) {
+						continue;
+					}
 
 					/* @codingStandardsIgnoreStart */
 					@copy( $node, str_replace( ABSPATH, $backup_folder, $node ) );
@@ -571,9 +590,11 @@ class Main_WP_Backup {
 	 */
 	public function create_zip_pcl_full_backup_2( $file_path, $excludes, $add_config, $include_core_files, $exclude_zip, $exclude_non_wp ) {
 		// @TODO: $exclude_zip is unused
+		unset( $exclude_zip );
 
 		global $classDir;
 		// @TODO: $classDir is unused
+		unset( $classDir );
 
 		//Create backup folder
 		$backup_folder = dirname( $file_path ) . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR;
@@ -636,7 +657,7 @@ class Main_WP_Backup {
 		unset( $nodes );
 
 		//Zip this backup folder..
-		require_once ( ABSPATH . 'wp-admin/includes/class-pclzip.php');
+		require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
 		$this->zip = new PclZip( $file_path );
 		$this->zip->create( $backup_folder, PCLZIP_OPT_REMOVE_PATH, $backup_folder );
 		if ( $add_config ) {
@@ -670,7 +691,9 @@ class Main_WP_Backup {
 	public function zip_add_dir( $path, $excludes ) {
 		$this->zip->addEmptyDir( str_replace( ABSPATH, '', $path ) );
 
-		if ( file_exists( rtrim( $path, '/' ) . '/.htaccess' ) ) { $this->add_file_to_zip( rtrim( $path, '/' ) . '/.htaccess', rtrim( str_replace( ABSPATH, '', $path ), '/' ) . '/mainwp-htaccess' ); }
+		if ( file_exists( rtrim( $path, '/' ) . '/.htaccess' ) ) {
+			$this->add_file_to_zip( rtrim( $path, '/' ) . '/.htaccess', rtrim( str_replace( ABSPATH, '', $path ), '/' ) . '/mainwp-htaccess' );
+		}
 
 		$iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $path ), RecursiveIteratorIterator::SELF_FIRST );
 
@@ -838,8 +861,12 @@ class Main_WP_Backup {
 
 		if ( $this->gc_cnt > 20 ) {
 			/* @codingStandardsIgnoreStart */
-			if ( function_exists( 'gc_enable' ) ) { @gc_enable(); }
-			if ( function_exists( 'gc_collect_cycles' ) ) { @gc_collect_cycles(); }
+			if ( function_exists( 'gc_enable' ) ) {
+				@gc_enable();
+			}
+			if ( function_exists( 'gc_collect_cycles' ) ) {
+				@gc_collect_cycles();
+			}
 			/* @codingStandardsIgnoreEnd */
 			$this->gc_cnt = 0;
 		}
@@ -851,8 +878,12 @@ class Main_WP_Backup {
 			$this->zip = null;
 			unset( $this->zip );
 			/* @codingStandardsIgnoreStart */
-			if ( function_exists( 'gc_enable' ) ) { @gc_enable(); }
-			if ( function_exists( 'gc_collect_cycles' ) ) { @gc_collect_cycles(); }
+			if ( function_exists( 'gc_enable' ) ) {
+				@gc_enable();
+			}
+			if ( function_exists( 'gc_collect_cycles' ) ) {
+				@gc_collect_cycles();
+			}
 			/* @codingStandardsIgnoreEnd */
 			$this->zip = new ZipArchive();
 			$this->zip->open( $this->zip_archive_file_name );
@@ -874,6 +905,12 @@ class Main_WP_Backup {
 	 * @return bool
 	 */
 	public function create_zip_console_full_backup( $file_path, $excludes, $add_config, $include_core_files, $exclude_zip, $exclude_non_wp ) {
+		unset( $file_path );
+		unset( $excludes );
+		unset( $add_config );
+		unset( $include_core_files );
+		unset( $exclude_zip );
+		unset( $exclude_non_wp );
 		// @TODO to work with 'zip' from system if PHP Zip library not available
 		//system('zip');
 		return false;
@@ -918,6 +955,7 @@ class Main_WP_Backup {
 
 			/* @codingStandardsIgnoreStart */
 			// @TODO: Handle errors, instead of supressing them
+			// @TODO: Don't use magic method to get $wpdb->dbh
 			$rows = @Main_WP_Child_DB::_query( 'SELECT * FROM ' . $table, $wpdb->dbh );
 			/* @codingStandardsIgnoreEnd */
 
@@ -996,6 +1034,7 @@ class Main_WP_Backup {
 			//$rows = $wpdb->get_results('SELECT * FROM ' . $table, ARRAY_N);
 			/* @codingStandardsIgnoreStart */
 			// @TODO: Handle errors, instead of supressing them
+			// @TODO: Don't use magic method to get $wpdb->dbh
 			$rows = @Main_WP_Child_DB::_query( 'SELECT * FROM ' . $table, $wpdb->dbh );
 			/* @codingStandardsIgnoreEnd */
 			if ( $rows ) {
@@ -1003,7 +1042,8 @@ class Main_WP_Backup {
 				$table_columns_insert = '';
 				foreach ( $table_columns as $table_column ) {
 					if ( '' !== $table_columns_insert ) {
-						$table_columns_insert .= ', '; }
+						$table_columns_insert .= ', ';
+					}
 					$table_columns_insert .= '`' . $table_column->Field . '`';
 				}
 				$table_insert = 'INSERT INTO `' . $table . '` (';
@@ -1013,7 +1053,6 @@ class Main_WP_Backup {
 				$current_insert = $table_insert;
 
 				$inserted = false;
-				$add_insert = '';
 				/* @codingStandardsIgnoreStart */
 				// @TODO: Handle errors, instead of supressing them
 				while ( $row = @Main_WP_Child_DB::fetch_array( $rows ) ) {
@@ -1036,7 +1075,7 @@ class Main_WP_Backup {
 						fwrite( $fh, "\n" . $current_insert . ';' );
 						$current_insert = $table_insert;
 						$current_insert .= $add_insert;
-						$inserted = false;
+						// $inserted = false; //@TODO: This line wasn't being used (it's overwritten below), should we be return false here?
 					} else {
 						if ( $inserted ) {
 							$current_insert .= ', ' . "\n";

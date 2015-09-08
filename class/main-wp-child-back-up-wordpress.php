@@ -16,6 +16,9 @@ class Main_WP_Child_Back_Up_WordPress {
 	}
 
 	// @TODO: Remove this
+	/**
+	 * Construct
+	 */
 	public function __construct() {
 
 	}
@@ -39,7 +42,7 @@ class Main_WP_Child_Back_Up_WordPress {
 	 */
 	function remove_update_nag( $value ) {
 		if ( isset( $value->response['backupwordpress/backupwordpress.php'] ) ) {
-			unset( $value->response['backupwordpress/backupwordpress.php']);
+			unset( $value->response['backupwordpress/backupwordpress.php'] );
 		}
 		return $value;
 	}
@@ -139,13 +142,13 @@ class Main_WP_Child_Back_Up_WordPress {
 		$backups_time = array();
 		foreach ( $schedules as $schedule ) {
 			$existing_backup = $schedule->get_backups();
-			if ( ! empty($existing_backup) ) {
+			if ( ! empty( $existing_backup ) ) {
 				$backups_time = array_merge( $backups_time, array_keys( $existing_backup ) );
 			}
 		}
 
 		$lasttime_backup = 0;
-		if ( ! empty($backups_time) ) {
+		if ( ! empty( $backups_time ) ) {
 			$lasttime_backup = max( $backups_time );
 		}
 
@@ -722,7 +725,7 @@ class Main_WP_Child_Back_Up_WordPress {
 
 		$current_path = urldecode( $_POST['browse_dir'] ); // @codingStandardsIgnoreLine
 
-		if ( empty($current_path) ) {
+		if ( empty( $current_path ) ) {
 			$current_path = null;
 		}
 
@@ -754,7 +757,7 @@ class Main_WP_Child_Back_Up_WordPress {
 
 		$current_path = urldecode( $_POST['browse_dir'] ); // @codingStandardsIgnoreLine
 
-		if ( empty($current_path) ) {
+		if ( empty( $current_path ) ) {
 			$current_path = null;
 		}
 
@@ -780,7 +783,7 @@ class Main_WP_Child_Back_Up_WordPress {
 		}
 
 		$current_value = get_option( 'hmbkp_schedule_' . $sch_id );
-		if ( is_array( $current_value ) && isset($current_value['excludes']) ) {
+		if ( is_array( $current_value ) && isset( $current_value['excludes'] ) ) {
 			// do not update 'excludes' value
 			$options['excludes'] = $current_value['excludes'];
 		}
@@ -840,10 +843,10 @@ class Main_WP_Child_Back_Up_WordPress {
 	public function remove_menu() {
 		global $submenu;
 
-		if ( isset($submenu['tools.php']) ) {
+		if ( isset( $submenu['tools.php'] ) ) {
 			foreach ( $submenu['tools.php'] as $index => $item ) {
 				if ( 'backupwordpress' === $item[2] ) {
-					unset($submenu['tools.php'][ $index ]);
+					unset( $submenu['tools.php'][ $index ] );
 					break;
 				}
 			}

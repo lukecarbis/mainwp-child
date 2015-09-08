@@ -9,7 +9,7 @@
  */
 
 // @TODO: Simplify if statement to make it readable
-if ( ( isset( $_REQUEST['heatmap'] ) && '1' === $_REQUEST['heatmap'] ) || ( isset($_REQUEST['mainwpsignature'] ) && ( ! empty($_REQUEST['mainwpsignature'] ) ) ) ) {
+if ( ( isset( $_REQUEST['heatmap'] ) && '1' === $_REQUEST['heatmap'] ) || ( isset( $_REQUEST['mainwpsignature'] ) && ( ! empty( $_REQUEST['mainwpsignature'] ) ) ) ) {
 	header( 'X-Frame-Options: ALLOWALL' );
 }
 
@@ -20,7 +20,10 @@ include_once( ABSPATH . 'wp-includes' . DIRECTORY_SEPARATOR . 'version.php' ); /
 // @TODO: Simplify with plugin_dir_path( __FILE__ ) and trailingslashit()
 $classDir = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . str_replace( basename( __FILE__ ), '', plugin_basename( __FILE__ ) ) . 'class' . DIRECTORY_SEPARATOR;
 
-function mainwp_child_autoload( $class_name ) {
+/**
+ * @param $class_name
+ */
+function main_wp_child_autoload( $class_name ) {
 	$class = strtolower( str_replace( '_', '-', $class_name ) );
 
 	// @TODO: Simplify with plugin_dir_path( __FILE__ ) and trailingslashit()
@@ -32,10 +35,13 @@ function mainwp_child_autoload( $class_name ) {
 }
 
 if ( function_exists( 'spl_autoload_register' ) ) {
-	spl_autoload_register( 'mainwp_child_autoload' );
+	spl_autoload_register( 'main_wp_child_autoload' );
 } else {
+	/**
+	 * @param $class_name
+	 */
 	function __autoload( $class_name ) {
-		mainwp_child_autoload( $class_name );
+		main_wp_child_autoload( $class_name );
 	}
 }
 
