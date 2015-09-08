@@ -91,7 +91,7 @@ class Main_WP_Child_Back_WP_Up {
 		function mainwp_backwpup_handle_fatal_error() {
 			$error = error_get_last();
 			$allowed_html = array(
-				'main_wp' => array()
+				'main_wp' => array(),
 			);
 			if ( isset( $error['type'] ) && E_ERROR === $error['type'] && isset( $error['message'] ) ) {
 				die( wp_kses( '<mainwp>' . base64_encode( serialize( array( 'error' => 'Main_WP_Child fatal error : ' . $error['message'] . ' Line: ' . $error['line'] . ' File: ' . $error['file'] ) ) ) . '</mainwp>', $allowed_html ) );
