@@ -851,7 +851,7 @@ class Main_WP_Child
 
         Main_WP_Child_Updraftplus_Backups::Instance()->updraftplus_init();                    
         if ( version_compare( phpversion(), '5.3', '>=' ) ) {
-            Main_WP_Child_Back_Up_WordPress::Instance()->init();
+            Main_WP_Child_Back_Up_WordPress::instance()->init();
         }
         
         Main_WP_Child_WP_Rocket::Instance()->init();
@@ -2735,8 +2735,8 @@ class Main_WP_Child
             }
             if ( version_compare( phpversion(), '5.3', '>=' ) ) {
                 if (isset($othersData['syncBackUpWordPress']) && $othersData['syncBackUpWordPress']) {
-                    if (Main_WP_Child_Back_Up_WordPress::isActivated()) {
-                        $information['syncBackUpWordPress'] =   Main_WP_Child_Back_Up_WordPress::Instance()->syncData();
+                    if (Main_WP_Child_Back_Up_WordPress::is_activated()) {
+                        $information['syncBackUpWordPress'] =   Main_WP_Child_Back_Up_WordPress::instance()->sync_data();
                     }
                 }
             }
@@ -4236,7 +4236,7 @@ class Main_WP_Child
             $error = sprintf( __( 'PHP Version %s is unsupported.', 'mainwp-child' ), phpversion());
             Main_WP_Helper::write(array('error' => $error));
         }
-        Main_WP_Child_Back_Up_WordPress::Instance()->action();
+        Main_WP_Child_Back_Up_WordPress::instance()->action();
     }
     
     function wp_rocket() {     
