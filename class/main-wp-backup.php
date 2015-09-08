@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Main_WP_Backup
+ */
 class Main_WP_Backup {
 	protected static $instance = null;
 	protected $excludeZip;
