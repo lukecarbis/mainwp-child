@@ -442,7 +442,7 @@ class Main_WP_Helper {
         // MainWP Robot
         if ($is_robot_post) {
             $all_comments = $post_custom['_mainwp_robot_post_comments'];
-            Main_WP_Child_Robot::Instance()->wpr_insertcomments($new_post_id, $all_comments);
+            Main_WP_Child_Robot::instance()->wpr_insert_comments($new_post_id, $all_comments);
         }
 
         $ret['success'] = true;
