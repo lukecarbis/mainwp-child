@@ -652,8 +652,8 @@ class Main_WP_Child_Server_Information {
 	 * @return mixed|void
 	 */
 	protected static function get_current_version() {
-		$currentVersion = get_option( 'mainwp_child_plugin_version' );
-		return $currentVersion;
+		$current_version = get_option( 'mainwp_child_plugin_version' );
+		return $current_version;
 	}
 
 	/**
@@ -803,15 +803,15 @@ class Main_WP_Child_Server_Information {
 	 * @param bool|false $compare_filesize
 	 */
 	protected static function render_row( $p_config, $p_compare, $p_version, $p_getter, $p_extra_text = '', $p_extra_compare = null, $p_extra_version = null, $compare_filesize = false ) {
-		$currentVersion = call_user_func( array( 'Main_WP_Child_Server_Information', $p_getter ) );
+		$current_version = call_user_func( array( 'Main_WP_Child_Server_Information', $p_getter ) );
 		?>
 		<tr>
 			<td></td>
 			<td><?php echo wp_kses_post( $p_config ); ?></td>
 			<td><?php echo wp_kses_post( $p_compare ); ?>  <?php echo esc_html( true === $p_version ? 'true' : $p_version . ' ' . $p_extra_text ); ?></td>
-			<td><?php echo wp_kses_post( true === $currentVersion ? 'true' : $currentVersion ); ?></td>
+			<td><?php echo wp_kses_post( true === $current_version ? 'true' : $current_version ); ?></td>
 			<?php if ( $compare_filesize ) : ?>
-			<td><?php echo wp_kses_post( self::filesize_compare( $currentVersion, $p_version, $p_compare ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
+			<td><?php echo wp_kses_post( self::filesize_compare( $current_version, $p_version, $p_compare ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
 			<?php else : ?>
 			<td><?php echo wp_kses_post( self::check( $p_compare, $p_version, $p_getter, $p_extra_compare, $p_extra_version ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
 			<?php endif; ?>
@@ -854,8 +854,8 @@ class Main_WP_Child_Server_Information {
 	 * @return bool
 	 */
 	protected static function check( $p_compare, $p_version, $p_getter, $p_extra_compare = null, $p_extra_version = null ) {
-		$currentVersion = call_user_func( array( 'Main_WP_Child_Server_Information', $p_getter ) );
-		return version_compare( $currentVersion, $p_version, $p_compare ) || ( ( null !== $p_extra_compare ) && version_compare( $currentVersion, $p_extra_version, $p_extra_compare ));
+		$current_version = call_user_func( array( 'Main_WP_Child_Server_Information', $p_getter ) );
+		return version_compare( $current_version, $p_version, $p_compare ) || ( ( null !== $p_extra_compare ) && version_compare( $current_version, $p_extra_version, $p_extra_compare ));
 	}
 
 	/**
