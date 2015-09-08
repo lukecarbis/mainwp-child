@@ -1,13 +1,13 @@
 <?php
 
-class MainWPClone
+class Main_WP_Clone
 {
     public static function init()
     {
         self::init_ajax();
 
-        add_action('check_admin_referer', array('MainWPClone', 'permalinkChanged'));
-        if (get_option('mainwp_child_clone_permalink') || get_option('mainwp_child_restore_permalink')) add_action('admin_notices', array('MainWPClone', 'permalinkAdminNotice'));
+        add_action('check_admin_referer', array('Main_WP_Clone', 'permalinkChanged'));
+        if (get_option('mainwp_child_clone_permalink') || get_option('mainwp_child_restore_permalink')) add_action('admin_notices', array('Main_WP_Clone', 'permalinkAdminNotice'));
     }
 
     public static function init_menu($the_branding, $childMenuSlug = "")
@@ -15,9 +15,9 @@ class MainWPClone
         if (empty($the_branding))
             $the_branding = "MainWP";      
         $page_title = $the_branding . "Clone";
-        //$page = add_options_page('MainWPClone', __($the_branding . ' Clone','mainwp-child'), 'manage_options', 'MainWPClone', array('MainWPClone', 'render'));
-        $page = add_submenu_page($childMenuSlug, $page_title, __($the_branding . ' Clone','mainwp-child'), 'manage_options', 'MainWPClone', array('MainWPClone', 'render'));
-        add_action('admin_print_scripts-'.$page, array('MainWPClone', 'print_scripts'));
+        //$page = add_options_page('Main_WP_Clone', __($the_branding . ' Clone','mainwp-child'), 'manage_options', 'Main_WP_Clone', array('Main_WP_Clone', 'render'));
+        $page = add_submenu_page($childMenuSlug, $page_title, __($the_branding . ' Clone','mainwp-child'), 'manage_options', 'Main_WP_Clone', array('Main_WP_Clone', 'render'));
+        add_action('admin_print_scripts-'.$page, array('Main_WP_Clone', 'print_scripts'));
     }
 
     public static function init_restore_menu($the_branding, $childMenuSlug = "")
@@ -25,9 +25,9 @@ class MainWPClone
         if (empty($the_branding))
             $the_branding = "MainWP";    
         $page_title = $the_branding . "Clone";
-        //$page = add_options_page('MainWPClone', __($the_branding . ' Restore','mainwp-child'), 'manage_options', 'MainWPRestore', array('MainWPClone', 'renderNormalRestore'));
-        $page = add_submenu_page($childMenuSlug, $page_title, __($the_branding . ' Restore','mainwp-child'), 'manage_options', 'MainWPRestore', array('MainWPClone', 'renderNormalRestore'));
-        add_action('admin_print_scripts-'.$page, array('MainWPClone', 'print_scripts'));
+        //$page = add_options_page('Main_WP_Clone', __($the_branding . ' Restore','mainwp-child'), 'manage_options', 'MainWPRestore', array('Main_WP_Clone', 'renderNormalRestore'));
+        $page = add_submenu_page($childMenuSlug, $page_title, __($the_branding . ' Restore','mainwp-child'), 'manage_options', 'MainWPRestore', array('Main_WP_Clone', 'renderNormalRestore'));
+        add_action('admin_print_scripts-'.$page, array('Main_WP_Clone', 'print_scripts'));
     }
 
     public static function print_scripts()
@@ -40,7 +40,7 @@ class MainWPClone
         global $wp_scripts;
         $ui = $wp_scripts->query('jquery-ui-core');
         $version = $ui->ver;
-        if (MainWPHelper::startsWith($version, '1.10'))
+        if (Main_WP_Helper::startsWith($version, '1.10'))
         {
             wp_enqueue_style('jquery-ui-style', plugins_url('/css/1.10.4/jquery-ui.min.css', dirname(__FILE__)));
         }
@@ -83,7 +83,7 @@ class MainWPClone
                 if (!function_exists('wp_handle_upload')) require_once(ABSPATH . 'wp-admin/includes/file.php');
                 $uploadedfile = $_FILES['file'];
                 $upload_overrides = array('test_form' => false);
-                add_filter('upload_mimes', array('MainWPClone', 'upload_mimes'));
+                add_filter('upload_mimes', array('Main_WP_Clone', 'upload_mimes'));
                 $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
                 if ($movefile)
                 {
@@ -101,8 +101,8 @@ class MainWPClone
         }
 
         $sitesToClone = get_option('mainwp_child_clone_sites');
-        $uploadSizeInBytes = min(MainWPHelper::return_bytes(ini_get('upload_max_filesize')), MainWPHelper::return_bytes(ini_get('post_max_size')));
-        $uploadSize = MainWPHelper::human_filesize($uploadSizeInBytes);
+        $uploadSizeInBytes = min(Main_WP_Helper::return_bytes(ini_get('upload_max_filesize')), Main_WP_Helper::return_bytes(ini_get('post_max_size')));
+        $uploadSize = Main_WP_Helper::human_filesize($uploadSizeInBytes);
         self::renderHeader();
 
         ?><div id="icon-options-general" class="icon32"><br></div><h2><?php _e('Clone or Restore','mainwp-child'); ?></h2><?php
@@ -113,7 +113,7 @@ class MainWPClone
             return;
         }
         $error = false;
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
         global $wp_filesystem;
         if ((!empty($wp_filesystem) && !$wp_filesystem->is_writable(WP_CONTENT_DIR)) || (empty($wp_filesystem) && !is_writable(WP_CONTENT_DIR)))
         {
@@ -152,10 +152,10 @@ class MainWPClone
                         foreach ($sitesToClone as $siteId => $siteToClone)
                         {
                             ?>
-                            <div class="clonesite_select_site_item" id="<?php echo $siteId; ?>" rand="<?php echo MainWPHelper::randString(5); ?>">
+                            <div class="clonesite_select_site_item" id="<?php echo $siteId; ?>" rand="<?php echo Main_WP_Helper::randString(5); ?>">
                                 <div class="mainwp-child_size_label" size="<?php echo $siteToClone['size']; ?>"><?php echo $siteToClone['size']; ?> MB</div>
                                 <div class="mainwp-child_name_label"><?php echo $siteToClone['name']; ?></div>
-                                <div class="mainwp-child_url_label"><?php echo MainWPHelper::getNiceURL($siteToClone['url']); ?></div>
+                                <div class="mainwp-child_url_label"><?php echo Main_WP_Helper::getNiceURL($siteToClone['url']); ?></div>
                             </div>
                             <?php
                         }
@@ -177,7 +177,7 @@ class MainWPClone
     <div class="mainwp-child_info-box-green"><?php _e('Upload backup in .zip format (Maximum filesize for your server settings: ','mainwp-child'); ?><?php echo $uploadSize; ?>)</div>
     <i><?php _e('If you have a FULL backup created by your Network dashboard you may restore it by uploading here.','mainwp-child'); ?><br />
     <?php _e('A database only backup will not work.','mainwp-child'); ?></i><br /><br />
-    <form action="<?php echo admin_url('admin.php?page=' . ($sitesToClone != '0' ? 'MainWPClone' : 'MainWPRestore') . '&upload=yes'); ?>" method="post" enctype="multipart/form-data"><input type="file" name="file" id="file" /> <input type="submit" name="submit" id="filesubmit" disabled="disabled" value="<?php _e('Clone/Restore Website','mainwp-child'); ?>" /></form>
+    <form action="<?php echo admin_url('admin.php?page=' . ($sitesToClone != '0' ? 'Main_WP_Clone' : 'MainWPRestore') . '&upload=yes'); ?>" method="post" enctype="multipart/form-data"><input type="file" name="file" id="file" /> <input type="submit" name="submit" id="filesubmit" disabled="disabled" value="<?php _e('Clone/Restore Website','mainwp-child'); ?>" /></form>
         <?php
         }
 		
@@ -213,13 +213,13 @@ class MainWPClone
             }
         }
 
-        $uploadSizeInBytes = min(MainWPHelper::return_bytes(ini_get('upload_max_filesize')), MainWPHelper::return_bytes(ini_get('post_max_size')));
-        $uploadSize = MainWPHelper::human_filesize($uploadSizeInBytes);
+        $uploadSizeInBytes = min(Main_WP_Helper::return_bytes(ini_get('upload_max_filesize')), Main_WP_Helper::return_bytes(ini_get('post_max_size')));
+        $uploadSize = Main_WP_Helper::human_filesize($uploadSizeInBytes);
         self::renderHeader();
 
         ?><div id="icon-options-general" class="icon32"><br></div><h2><strong><?php _e('Option 1:', 'mainwp-child'); ?></strong> <?php _e('Restore','mainwp-child'); ?></h2><?php
 
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
         global $wp_filesystem;
         if ((!empty($wp_filesystem) && !$wp_filesystem->is_writable(WP_CONTENT_DIR)) || (empty($wp_filesystem) && !is_writable(WP_CONTENT_DIR)))
         {
@@ -267,9 +267,9 @@ Author URI: http://dd32.id.au/
         $page = $_REQUEST['page'];
 
         $sitesToClone = get_option('mainwp_child_clone_sites');
-        $url = admin_url('admin.php?page=' . ($sitesToClone != '0' ? 'MainWPClone' : 'MainWPRestore') . "#title_03");
+        $url = admin_url('admin.php?page=' . ($sitesToClone != '0' ? 'Main_WP_Clone' : 'MainWPRestore') . "#title_03");
 
-        $dirs = MainWPHelper::getMainWPDir('backup', false);
+        $dirs = Main_WP_Helper::getMainWPDir('backup', false);
         $current_dir = $backup_dir = $dirs[0];		
 
         if ( isset($_REQUEST['dir']) ) {
@@ -295,7 +295,7 @@ Author URI: http://dd32.id.au/
                 echo '<div class="mainwp-child_info-box-yellow"><strong>' . __('Root directory is not readable. Please contact with site administrator to correct.','mainwp-child') . '</strong></div>';
                 return;
         }
-        MainWPHelper::update_option('mainwp_child_clone_from_server_last_folder', rtrim($current_dir,'/'));
+        Main_WP_Helper::update_option('mainwp_child_clone_from_server_last_folder', rtrim($current_dir,'/'));
 
         $parts = explode('/', ltrim($current_dir, '/'));						
         $dirparts = '';
@@ -341,7 +341,7 @@ Author URI: http://dd32.id.au/
                 if (is_dir( $current_dir . "/" . $file) ) 
                         $directories[] = $file;				
                 else {
-                        if (!MainWPHelper::isArchive($file))
+                        if (!Main_WP_Helper::isArchive($file))
                                 $rejected_files[] = $file;	
                         else 	
                                 $files[] = $file;
@@ -414,8 +414,8 @@ Author URI: http://dd32.id.au/
 	
     public static function renderJavaScript()
     {
-        $uploadSizeInBytes = min(MainWPHelper::return_bytes(ini_get('upload_max_filesize')), MainWPHelper::return_bytes(ini_get('post_max_size')));
-        $uploadSize = MainWPHelper::human_filesize($uploadSizeInBytes);
+        $uploadSizeInBytes = min(Main_WP_Helper::return_bytes(ini_get('upload_max_filesize')), Main_WP_Helper::return_bytes(ini_get('post_max_size')));
+        $uploadSize = Main_WP_Helper::human_filesize($uploadSizeInBytes);
 ?>
     <div id="mainwp-child_clone_status" title="Restore process"></div>
     <script language="javascript">
@@ -1019,11 +1019,11 @@ Author URI: http://dd32.id.au/
 
     public static function init_ajax()
     {
-        add_action('wp_ajax_mainwp-child_clone_backupcreate', array('MainWPClone', 'cloneBackupCreate'));
-        add_action('wp_ajax_mainwp-child_clone_backupcreatepoll', array('MainWPClone', 'cloneBackupCreatePoll'));
-        add_action('wp_ajax_mainwp-child_clone_backupdownload', array('MainWPClone', 'cloneBackupDownload'));
-        add_action('wp_ajax_mainwp-child_clone_backupdownloadpoll', array('MainWPClone', 'cloneBackupDownloadPoll'));
-        add_action('wp_ajax_mainwp-child_clone_backupextract', array('MainWPClone', 'cloneBackupExtract'));
+        add_action('wp_ajax_mainwp-child_clone_backupcreate', array('Main_WP_Clone', 'cloneBackupCreate'));
+        add_action('wp_ajax_mainwp-child_clone_backupcreatepoll', array('Main_WP_Clone', 'cloneBackupCreatePoll'));
+        add_action('wp_ajax_mainwp-child_clone_backupdownload', array('Main_WP_Clone', 'cloneBackupDownload'));
+        add_action('wp_ajax_mainwp-child_clone_backupdownloadpoll', array('Main_WP_Clone', 'cloneBackupDownloadPoll'));
+        add_action('wp_ajax_mainwp-child_clone_backupextract', array('Main_WP_Clone', 'cloneBackupExtract'));
     }
 
     public static function cloneBackupCreate()
@@ -1042,17 +1042,17 @@ Author URI: http://dd32.id.au/
 
             $key = $siteToClone['extauth'];
 
-            MainWPHelper::endSession();
+            Main_WP_Helper::endSession();
             //Send request to the childsite!
             global $wp_version;
             $method = (function_exists('gzopen') ? 'tar.gz' : 'zip');
-            $result = MainWPHelper::fetchUrl($url, array('cloneFunc' => 'createCloneBackup', 'key' => $key, 'f' => $rand, 'wpversion' => $wp_version, 'zipmethod' => $method));
+            $result = Main_WP_Helper::fetchUrl($url, array('cloneFunc' => 'createCloneBackup', 'key' => $key, 'f' => $rand, 'wpversion' => $wp_version, 'zipmethod' => $method));
 
             if (!$result['backup']) throw new Exception(__('Could not create backupfile on child','mainwp-child'));
             @session_start();
 
-            MainWPHelper::update_option('mainwp_temp_clone_plugins', $result['plugins']);
-            MainWPHelper::update_option('mainwp_temp_clone_themes', $result['themes']);
+            Main_WP_Helper::update_option('mainwp_temp_clone_plugins', $result['plugins']);
+            Main_WP_Helper::update_option('mainwp_temp_clone_themes', $result['themes']);
 
             $output = array('url' => $result['backup'], 'size' => round($result['size'] / 1024, 0));
         }
@@ -1080,9 +1080,9 @@ Author URI: http://dd32.id.au/
 
             $key = $siteToClone['extauth'];
 
-            MainWPHelper::endSession();
+            Main_WP_Helper::endSession();
             //Send request to the childsite!
-            $result = MainWPHelper::fetchUrl($url, array('cloneFunc' => 'createCloneBackupPoll', 'key' => $key, 'f' => $rand));
+            $result = Main_WP_Helper::fetchUrl($url, array('cloneFunc' => 'createCloneBackupPoll', 'key' => $key, 'f' => $rand));
 
             if (!isset($result['size'])) throw new Exception(__('Invalid response','mainwp-child'));
 
@@ -1121,19 +1121,19 @@ Author URI: http://dd32.id.au/
             {
                 $url = $file;
             }
-            MainWPHelper::endSession();
+            Main_WP_Helper::endSession();
             //Send request to the childsite!
             $split = explode('=', $file);
             $file = urldecode($split[count($split) - 1]);
             $filename = 'download-'.basename($file);
-            $dirs = MainWPHelper::getMainWPDir('backup', false);
+            $dirs = Main_WP_Helper::getMainWPDir('backup', false);
             $backupdir = $dirs[0];
 
             if ($dh = opendir($backupdir))
             {
                 while (($file = readdir($dh)) !== false)
                 {
-                    if ($file != '.' && $file != '..' && MainWPHelper::isArchive($file, 'download-'))
+                    if ($file != '.' && $file != '..' && Main_WP_Helper::isArchive($file, 'download-'))
                     {
                         @unlink($backupdir . $file);
                     }
@@ -1168,7 +1168,7 @@ Author URI: http://dd32.id.au/
                     {
                         $siteToClone = $sitesToClone[$siteId];
 
-                        MainWPHelper::fetchUrl($siteToClone['url'], array('cloneFunc' => 'deleteCloneBackup', 'key' => $siteToClone['extauth'], 'f' => $_POST['file']));
+                        Main_WP_Helper::fetchUrl($siteToClone['url'], array('cloneFunc' => 'deleteCloneBackup', 'key' => $siteToClone['extauth'], 'f' => $_POST['file']));
                     }
                 }
             }
@@ -1189,15 +1189,15 @@ Author URI: http://dd32.id.au/
     {
         try
         {
-            MainWPHelper::endSession();
-            $dirs = MainWPHelper::getMainWPDir('backup', false);
+            Main_WP_Helper::endSession();
+            $dirs = Main_WP_Helper::getMainWPDir('backup', false);
             $backupdir = $dirs[0];
 
             $files = glob($backupdir . 'download-*');
             $archiveFile = false;
             foreach ($files as $file)
             {
-                if (MainWPHelper::isArchive($file, 'download-'))
+                if (Main_WP_Helper::isArchive($file, 'download-'))
                 {
                     $archiveFile = $file;
                     break;
@@ -1219,20 +1219,20 @@ Author URI: http://dd32.id.au/
     {
         try
         {
-            MainWPHelper::endSession();
+            Main_WP_Helper::endSession();
 
             $file = (isset($_POST['f']) ? $_POST['f'] : $_POST['file']);
             $testFull = false;
             if ($file == '')
             {
-                $dirs = MainWPHelper::getMainWPDir('backup', false);
+                $dirs = Main_WP_Helper::getMainWPDir('backup', false);
                 $backupdir = $dirs[0];
 
                 $files = glob($backupdir . 'download-*');
                 $archiveFile = false;
                 foreach ($files as $file)
                 {
-                    if (MainWPHelper::isArchive($file, 'download-'))
+                    if (Main_WP_Helper::isArchive($file, 'download-'))
                     {
                         $archiveFile = $file;
                         break;
@@ -1248,7 +1248,7 @@ Author URI: http://dd32.id.au/
                 $testFull = true;
             }
             //return size in kb
-            $cloneInstall = new MainWPCloneInstall($file);
+            $cloneInstall = new Main_WP_Clone_Install($file);
 
             //todo: RS: refactor to get those plugins after install (after .18 release)
             $cloneInstall->readConfigurationFile();
@@ -1283,20 +1283,20 @@ Author URI: http://dd32.id.au/
 //            $cloneInstall->update_option('mainwp_child_nossl_key', $nossl_key);
 //            $cloneInstall->update_option('mainwp_child_clone_sites', $sitesToClone);
 //            $cloneInstall->update_option('mainwp_child_clone_permalink', true);
-            MainWPHelper::update_option('mainwp_child_pubkey', $pubkey, 'yes');
-            MainWPHelper::update_option('mainwp_child_uniqueId', $uniqueId);
-            MainWPHelper::update_option('mainwp_child_server', $server);
-            MainWPHelper::update_option('mainwp_child_nonce', $nonce);
-            MainWPHelper::update_option('mainwp_child_nossl', $nossl, 'yes');
-            MainWPHelper::update_option('mainwp_child_nossl_key', $nossl_key);
-            MainWPHelper::update_option('mainwp_child_clone_sites', $sitesToClone);
-            if (!MainWPHelper::startsWith(basename($file), 'download-backup-'))
+            Main_WP_Helper::update_option('mainwp_child_pubkey', $pubkey, 'yes');
+            Main_WP_Helper::update_option('mainwp_child_uniqueId', $uniqueId);
+            Main_WP_Helper::update_option('mainwp_child_server', $server);
+            Main_WP_Helper::update_option('mainwp_child_nonce', $nonce);
+            Main_WP_Helper::update_option('mainwp_child_nossl', $nossl, 'yes');
+            Main_WP_Helper::update_option('mainwp_child_nossl_key', $nossl_key);
+            Main_WP_Helper::update_option('mainwp_child_clone_sites', $sitesToClone);
+            if (!Main_WP_Helper::startsWith(basename($file), 'download-backup-'))
             {
-                MainWPHelper::update_option('mainwp_child_restore_permalink', true, 'yes');
+                Main_WP_Helper::update_option('mainwp_child_restore_permalink', true, 'yes');
             }
             else
             {
-                MainWPHelper::update_option('mainwp_child_clone_permalink', true, 'yes');
+                Main_WP_Helper::update_option('mainwp_child_clone_permalink', true, 'yes');
             }
 			
             $cloneInstall->clean();
@@ -1312,7 +1312,7 @@ Author URI: http://dd32.id.au/
                         if (!is_dir($dir . $entry)) continue;
                         if (($entry == '.') || ($entry == '..')) continue;
 
-                        if (!in_array($entry, $plugins)) MainWPHelper::delete_dir($dir . $entry);
+                        if (!in_array($entry, $plugins)) Main_WP_Helper::delete_dir($dir . $entry);
                     }
                     @closedir($fh);
                 }
@@ -1331,7 +1331,7 @@ Author URI: http://dd32.id.au/
                         if (!is_dir($dir . $entry)) continue;
                         if (($entry == '.') || ($entry == '..')) continue;
 
-                        if (!in_array($entry, $themes)) MainWPHelper::delete_dir($dir . $entry);
+                        if (!in_array($entry, $themes)) Main_WP_Helper::delete_dir($dir . $entry);
                     }
                     @closedir($fh);
                 }

@@ -1,14 +1,14 @@
 <?php
 
-class MainWPChildBackUpWordPress
+class Main_WP_Child_Back_Up_WordPress
 {   
     public static $instance = null;   
     
     static function Instance() {        
-        if (MainWPChildBackUpWordPress::$instance == null) {
-            MainWPChildBackUpWordPress::$instance = new MainWPChildBackUpWordPress();
+        if (Main_WP_Child_Back_Up_WordPress::$instance == null) {
+            Main_WP_Child_Back_Up_WordPress::$instance = new Main_WP_Child_Back_Up_WordPress();
         }
-        return MainWPChildBackUpWordPress::$instance;
+        return Main_WP_Child_Back_Up_WordPress::$instance;
     }    
     
     public function __construct() {                
@@ -38,7 +38,7 @@ class MainWPChildBackUpWordPress
         $information = array();          
         if (!self::isActivated()) {
             $information['error'] = 'NO_BACKUPWORDPRESS';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }   
         if (isset($_POST['mwp_action'])) {            
             switch ($_POST['mwp_action']) {                               
@@ -80,7 +80,7 @@ class MainWPChildBackUpWordPress
                 break;
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
     
     
@@ -88,14 +88,14 @@ class MainWPChildBackUpWordPress
         $schedule_id = (isset($_POST['schedule_id']) && !empty($_POST['schedule_id'])) ? $_POST['schedule_id'] : "";                        
         if (empty($schedule_id)) {
             $information = array('error' => 'Empty schedule id');
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         } else {        
             $schedule_id = sanitize_text_field( urldecode( $schedule_id ) );  
             HM\BackUpWordPress\Schedules::get_instance()->refresh_schedules();
             if ( ! HM\BackUpWordPress\Schedules::get_instance()->get_schedule( $schedule_id ) ) 
             {
                 $information = array('result' => 'NOTFOUND');
-                MainWPHelper::write($information);
+                Main_WP_Helper::write($information);
             }       
         }
          
@@ -128,9 +128,9 @@ class MainWPChildBackUpWordPress
     }
             
     function set_showhide() {
-        MainWPHelper::update_option('mainwp_backupwordpress_ext_enabled', "Y");        
+        Main_WP_Helper::update_option('mainwp_backupwordpress_ext_enabled', "Y");        
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_backupwordpress_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_backupwordpress_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }

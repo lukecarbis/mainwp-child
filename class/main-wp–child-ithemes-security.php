@@ -1,14 +1,14 @@
 <?php
 
-class MainWPChildIThemesSecurity
+class Main_WP_Child_iThemes_Security
 {   
     public static $instance = null;   
     
     static function Instance() {
-        if (MainWPChildIThemesSecurity::$instance == null) {
-            MainWPChildIThemesSecurity::$instance = new MainWPChildIThemesSecurity();
+        if (Main_WP_Child_iThemes_Security::$instance == null) {
+            Main_WP_Child_iThemes_Security::$instance = new Main_WP_Child_iThemes_Security();
         }
-        return MainWPChildIThemesSecurity::$instance;
+        return Main_WP_Child_iThemes_Security::$instance;
     }    
     
     public function __construct() {
@@ -23,9 +23,9 @@ class MainWPChildIThemesSecurity
     
     function syncOthersData($data) {
         if (is_array($data) && isset($data['ithemeExtActivated']) && ($data['ithemeExtActivated'] == 'yes')) {
-            MainWPHelper::update_option('mainwp_ithemes_ext_activated', 'Y');                 
+            Main_WP_Helper::update_option('mainwp_ithemes_ext_activated', 'Y');                 
         } else {
-            MainWPHelper::update_option('mainwp_ithemes_ext_activated', '');                 
+            Main_WP_Helper::update_option('mainwp_ithemes_ext_activated', '');                 
         }
     }
     
@@ -33,7 +33,7 @@ class MainWPChildIThemesSecurity
         $information = array();
         if (!class_exists('ITSEC_Core')) {
             $information['error'] = 'NO_ITHEME_SECURITY';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }   
         if (isset($_POST['mwp_action'])) {
             switch ($_POST['mwp_action']) {                               
@@ -84,13 +84,13 @@ class MainWPChildIThemesSecurity
                 break;             
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
    
     function set_showhide() {
-        MainWPHelper::update_option('mainwp_ithemes_ext_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_ithemes_ext_enabled', "Y", 'yes');
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_ithemes_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_ithemes_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }
@@ -132,7 +132,7 @@ class MainWPChildIThemesSecurity
             require( trailingslashit( $itsec_globals['plugin_dir'] ) . 'core/class-itsec-lib.php' );
         }
 
-        MainWPHelper::update_option('mainwp_ithemes_ext_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_ithemes_ext_enabled', "Y", 'yes');
         $settings = unserialize(base64_decode($_POST['settings']));           
         $updated = false;
         $rewrites_changed = false;

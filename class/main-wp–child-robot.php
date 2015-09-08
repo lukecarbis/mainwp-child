@@ -1,16 +1,16 @@
 <?php
         
-class MainWPChildRobot
+class Main_WP_Child_Robot
 {
     public static $instance = null;
 
     static function Instance()
     {
-        if (MainWPChildRobot::$instance == null)
+        if (Main_WP_Child_Robot::$instance == null)
         {
-            MainWPChildRobot::$instance = new MainWPChildRobot();
+            Main_WP_Child_Robot::$instance = new Main_WP_Child_Robot();
         }
-        return MainWPChildRobot::$instance;
+        return Main_WP_Child_Robot::$instance;
     }
     
     public function wpr_insertcomments($postid, $comments) {

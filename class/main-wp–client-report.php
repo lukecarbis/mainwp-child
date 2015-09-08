@@ -1,16 +1,16 @@
 <?php
 
-class MainWPClientReport
+class Main_WP_Client_Report
 {   
     public static $instance = null; 
     public static $mainwpChildReports = false;
     public static $streamVersionNumber = null;
     
     static function Instance() {
-        if (MainWPClientReport::$instance == null) {
-            MainWPClientReport::$instance = new MainWPClientReport();
+        if (Main_WP_Client_Report::$instance == null) {
+            Main_WP_Client_Report::$instance = new Main_WP_Client_Report();
         }
-        return MainWPClientReport::$instance;
+        return Main_WP_Client_Report::$instance;
     }    
     
     public function __construct() {
@@ -18,8 +18,8 @@ class MainWPClientReport
     }
         
     public static function  init() {                
-        add_filter('wp_stream_connectors', array('MainWPClientReport', 'init_stream_connectors'), 10, 1);   
-        add_filter('mainwp_client_reports_connectors', array('MainWPClientReport', 'init_connectors'), 10, 1);   
+        add_filter('wp_stream_connectors', array('Main_WP_Client_Report', 'init_stream_connectors'), 10, 1);   
+        add_filter('mainwp_client_reports_connectors', array('Main_WP_Client_Report', 'init_connectors'), 10, 1);   
     }
         
     public static function init_stream_connectors($classes) {
@@ -52,7 +52,7 @@ class MainWPClientReport
         );     
         
         foreach ( $connectors as $connector ) {                
-                $class     = "MainWPChildReportsConnector$connector";
+                $class     = "Main_WP_ChildReportsConnector$connector";
                 $classes[] = $class;
         }          
         return $classes;
@@ -70,7 +70,7 @@ class MainWPClientReport
             self::$streamVersionNumber = 3; 
         } else {
             $information['error'] = 'NO_STREAM';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         } 
         
         if (isset($_POST['mwp_action'])) {
@@ -89,7 +89,7 @@ class MainWPClientReport
                 break;
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }  
     
     public function save_sucuri_stream() {        
@@ -466,7 +466,7 @@ class MainWPClientReport
                                 
                 switch ($data) {
                     case "date":
-                        $token_values[$token] = MainWPHelper::formatTimestamp(MainWPHelper::getTimestamp(strtotime($record->created)));
+                        $token_values[$token] = Main_WP_Helper::formatTimestamp(Main_WP_Helper::getTimestamp(strtotime($record->created)));
                         break;
                     case "area":                        
                         $data = "sidebar_name";  
@@ -584,9 +584,9 @@ class MainWPClientReport
     }
      
     function set_showhide() {
-        MainWPHelper::update_option('mainwp_creport_ext_branding_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_creport_ext_branding_enabled', "Y", 'yes');
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_creport_branding_stream_hide', $hide);        
+        Main_WP_Helper::update_option('mainwp_creport_branding_stream_hide', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }

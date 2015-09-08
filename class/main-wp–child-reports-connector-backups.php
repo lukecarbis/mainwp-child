@@ -1,35 +1,30 @@
 <?php
-if (class_exists('WP_Stream\Connector')) {
-    class MainWPStreamConnectorBackups extends WP_Stream\Connector
+if (class_exists('MainWP_WP_Stream_Connector')) {
+    class Main_WP_Child_Reports_Connector_Backups extends MainWP_WP_Stream_Connector   
     {   
-
 
 	/**
 	 * Connector slug
 	 *
 	 * @var string
 	 */
-	public $name = 'mainwp_backups';
+	public static $name = 'mainwp_backups';
 
 	/**
 	 * Actions registered for this connector
 	 *
 	 * @var array
 	 */
-	public $actions = array(
+	public static $actions = array(
             'mainwp_backup',		
 	);
 
-        public function is_dependency_satisfied() {
-            return true;
-	}
-        
 	/**
 	 * Return translated connector label
 	 *
 	 * @return string Translated connector label
 	 */
-	public function get_label() {
+	public static function get_label() {
             return __( 'MainWP Backups', 'default' );                
 	}
 
@@ -38,19 +33,18 @@ if (class_exists('WP_Stream\Connector')) {
 	 *
 	 * @return array Action label translations
 	 */
-	public function get_action_labels() {
+	public static function get_action_labels() {
             return array(
                 'mainwp_backup'    => __( 'Backup', 'default' ),			
             );
 	}
 
-        
 	/**
 	 * Return translated context labels
 	 *
 	 * @return array Context label translations
 	 */
-	public function get_context_labels() {
+	public static function get_context_labels() {
             return array(
                 'mainwp_backups' => __( 'MainWP Backups', 'mainwp-child' ),
             );
@@ -64,19 +58,18 @@ if (class_exists('WP_Stream\Connector')) {
 	 * @param  int   $record     Stream record
 	 * @return array             Action links
 	 */
-	public function action_links( $links, $record ) {
+	public static function action_links( $links, $record ) {
             if (isset($record->object_id)) {
             }
             return $links;
 	}
 
-        public function callback_mainwp_backup($destination, $message, $size, $status, $type) {                                                
+        public static function callback_mainwp_backup($destination, $message, $size, $status, $type) {                                                
             self::log(
                 $message,
                 compact('destination', 'status', 'type', 'size'),
                 0,
-                'mainwp_backups',
-                'mainwp_backup'
+                array( 'mainwp_backups' => 'mainwp_backup' )
             );
         }
     }

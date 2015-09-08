@@ -1,6 +1,6 @@
 <?php
 
-class MainWPChildDB
+class Main_WP_Child_DB
 {
     //Support old & new versions of wordpress (3.9+)
     public static function use_mysqli()
@@ -122,9 +122,9 @@ class MainWPChildDB
         /** @var $wpdb wpdb */
         global $wpdb;
 
-        $rows   = MainWPChildDB::_query('SHOW table STATUS', $wpdb->dbh);
+        $rows   = Main_WP_Child_DB::_query('SHOW table STATUS', $wpdb->dbh);
         $size = 0;
-        while ($row = MainWPChildDB::fetch_array($rows))
+        while ($row = Main_WP_Child_DB::fetch_array($rows))
         {
             $size += $row['Data_length'];
         }

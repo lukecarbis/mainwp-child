@@ -1,6 +1,6 @@
 <?php
 if (class_exists('WP_Stream\Connector')) {
-    class MainWPStreamConnectorSucuri extends WP_Stream\Connector
+    class Main_WP_Stream_Connector_Sucuri extends WP_Stream\Connector
     {   
 
     

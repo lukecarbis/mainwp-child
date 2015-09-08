@@ -1,15 +1,15 @@
 <?php
 
-class MainWPChildLinksChecker
+class Main_WP_Child_Links_Checker
 {   
     
     public static $instance = null;   
     
     static function Instance() {
-        if (MainWPChildLinksChecker::$instance == null) {
-            MainWPChildLinksChecker::$instance = new MainWPChildLinksChecker();
+        if (Main_WP_Child_Links_Checker::$instance == null) {
+            Main_WP_Child_Links_Checker::$instance = new Main_WP_Child_Links_Checker();
         }
-        return MainWPChildLinksChecker::$instance;
+        return Main_WP_Child_Links_Checker::$instance;
     }  
     
     public function __construct() {
@@ -20,7 +20,7 @@ class MainWPChildLinksChecker
         $information = array();
         if (!defined('BLC_ACTIVE')  || !function_exists('blc_init')) {
             $information['error'] = 'NO_BROKENLINKSCHECKER';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }             
         blc_init();        
         if (isset($_POST['mwp_action'])) {
@@ -51,7 +51,7 @@ class MainWPChildLinksChecker
                     break; 
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }  
    
      
@@ -166,9 +166,9 @@ class MainWPChildLinksChecker
     
 
      function set_showhide() {
-        MainWPHelper::update_option('mainwp_linkschecker_ext_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_linkschecker_ext_enabled', "Y", 'yes');
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_linkschecker_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_linkschecker_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }
@@ -258,7 +258,7 @@ class MainWPChildLinksChecker
                     if ( !empty($container) /* && ($container instanceof blcAnyPostContainer) */ ) {                        
                         $lnk->container_type = $container->container_type;
                         $lnk->container_id = $container->container_id;                          
-                        $lnk->source_data = MainWPChildLinksChecker::Instance()->ui_get_source($container, $instance->container_field);  
+                        $lnk->source_data = Main_WP_Child_Links_Checker::Instance()->ui_get_source($container, $instance->container_field);  
                     }
                     
                     $can_edit_text = false;

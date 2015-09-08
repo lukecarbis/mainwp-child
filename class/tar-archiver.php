@@ -2,7 +2,7 @@
 
 //todo: BZ2; support fseek!
 
-class TarArchiver
+class Tar_Archiver
 {
     const IDLE = 0;
     const APPEND = 1;
@@ -20,7 +20,7 @@ class TarArchiver
     protected $chunk = ''; //1024 * 1024 * 4
     protected $chunkSize = 4194304; //1024 * 1024 * 4
 
-    /** @var $backup MainWPBackup */
+    /** @var $backup Main_WP_Backup */
     protected $backup;
 
     protected $type;
@@ -155,11 +155,11 @@ class TarArchiver
                 $coreFiles = array('favicon.ico', 'index.php', 'license.txt', 'readme.html', 'wp-activate.php', 'wp-app.php', 'wp-blog-header.php', 'wp-comments-post.php', 'wp-config.php', 'wp-config-sample.php', 'wp-cron.php', 'wp-links-opml.php', 'wp-load.php', 'wp-login.php', 'wp-mail.php', 'wp-pass.php', 'wp-register.php', 'wp-settings.php', 'wp-signup.php', 'wp-trackback.php', 'xmlrpc.php');
                 foreach ($nodes as $key => $node)
                 {
-                    if (MainWPHelper::startsWith($node, ABSPATH . WPINC))
+                    if (Main_WP_Helper::startsWith($node, ABSPATH . WPINC))
                     {
                         unset($nodes[$key]);
                     }
-                    else if (MainWPHelper::startsWith($node, ABSPATH . basename(admin_url(''))))
+                    else if (Main_WP_Helper::startsWith($node, ABSPATH . basename(admin_url(''))))
                     {
                         unset($nodes[$key]);
                     }
@@ -185,10 +185,10 @@ class TarArchiver
             {
                 if ($excludenonwp && is_dir($node))
                 {
-                    if (!MainWPHelper::startsWith($node, WP_CONTENT_DIR) && !MainWPHelper::startsWith($node, ABSPATH . 'wp-admin') && !MainWPHelper::startsWith($node, ABSPATH . WPINC)) continue;
+                    if (!Main_WP_Helper::startsWith($node, WP_CONTENT_DIR) && !Main_WP_Helper::startsWith($node, ABSPATH . 'wp-admin') && !Main_WP_Helper::startsWith($node, ABSPATH . WPINC)) continue;
                 }
 
-                if (!MainWPHelper::inExcludes($excludes, str_replace(ABSPATH, '', $node)))
+                if (!Main_WP_Helper::inExcludes($excludes, str_replace(ABSPATH, '', $node)))
                 {
                     if (is_dir($node))
                     {
@@ -274,7 +274,7 @@ class TarArchiver
             $name = $path->__toString();
             if ((basename($name) == '.') || (basename($name) == '..')) continue;
 
-            if (!MainWPHelper::inExcludes($excludes, str_replace(ABSPATH, '', $name)))
+            if (!Main_WP_Helper::inExcludes($excludes, str_replace(ABSPATH, '', $name)))
             {
                 if ($path->isDir())
                 {
@@ -473,7 +473,7 @@ class TarArchiver
     {
         if ((basename($path) == '.') || (basename($path) == '..')) return false;
 
-        if ($this->excludeZip && MainWPHelper::endsWith($path, '.zip'))
+        if ($this->excludeZip && Main_WP_Helper::endsWith($path, '.zip'))
         {
             $this->log('Skipping ' . $path);
             return false;
@@ -1410,11 +1410,11 @@ if (class_exists('SplHeap'))
             {
                 return strcmp($pathA, $pathB);
             }
-            else if (MainWPHelper::startsWith($dirnameA, $dirnameB))
+            else if (Main_WP_Helper::startsWith($dirnameA, $dirnameB))
             {
                 return 1;
             }
-            else if (MainWPHelper::startsWith($dirnameB, $dirnameA))
+            else if (Main_WP_Helper::startsWith($dirnameB, $dirnameA))
             {
                 return -1;
             }

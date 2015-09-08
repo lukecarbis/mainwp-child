@@ -9,7 +9,7 @@ define('MAINWP_CHILD_NR_OF_PAGES', 50);
 include_once(ABSPATH . '/wp-admin/includes/file.php');
 include_once(ABSPATH . '/wp-admin/includes/plugin.php');
 
-class MainWPChild
+class Main_WP_Child
 {
     private $version = '2.0.28';
     private $update_version = '1.2';
@@ -91,7 +91,7 @@ class MainWPChild
     private $branding_robust = "MainWP";    
 
     public function __construct($plugin_file)
-    {			
+    {
         $this->update();
               
         $this->filterFunction = create_function( '$a', 'if ($a == null) { return false; } return $a;' );
@@ -109,21 +109,23 @@ class MainWPChild
         add_action('init', array(&$this, 'localization'));
 
         if (is_admin()) {
-            MainWPHelper::update_option('mainwp_child_plugin_version', $this->version, 'yes');
+            var_dump(1);
+            Main_WP_Helper::update_option('mainwp_child_plugin_version', '2.0.8', 'yes');
+            var_dump(2);
         }
 
         $this->checkOtherAuth();
-		
-        MainWPClone::init();
-        MainWPChildServerInformation::init();  
-        MainWPClientReport::init();             
-        MainWPChildPluginsCheck::Instance();
-        MainWPChildThemesCheck::Instance();
+
+        Main_WP_Clone::init();
+        Main_WP_Child_Server_Information::init();  
+        Main_WP_Client_Report::init();             
+        Main_WP_Child_Plugins_Check::Instance();
+        Main_WP_Child_Themes_Check::Instance();
         
         $this->run_saved_snippets();
 
         if (!get_option('mainwp_child_pubkey'))
-            MainWPHelper::update_option('mainwp_child_branding_disconnected', 'yes', 'yes');
+            Main_WP_Helper::update_option('mainwp_child_branding_disconnected', 'yes', 'yes');
 
         $branding_robust = true;
         $cancelled_branding = (get_option('mainwp_child_branding_disconnected') === 'yes') && !get_option('mainwp_branding_preserve_branding');
@@ -149,7 +151,7 @@ class MainWPChild
             $options = array('mainwp_child_legacy', 'mainwp_child_auth', 'mainwp_branding_ext_enabled', 'mainwp_child_uniqueId', 'mainwp_child_onetime_htaccess', 'mainwp_child_htaccess_set', 'mainwp_child_fix_htaccess', 'mainwp_child_pubkey', 'mainwp_child_server', 'mainwp_child_nonce', 'mainwp_child_nossl', 'mainwp_child_nossl_key', 'mainwp_child_remove_wp_version', 'mainwp_child_remove_rsd', 'mainwp_child_remove_wlw', 'mainwp_child_remove_core_updates', 'mainwp_child_remove_plugin_updates', 'mainwp_child_remove_theme_updates', 'mainwp_child_remove_php_reporting', 'mainwp_child_remove_scripts_version', 'mainwp_child_remove_styles_version', 'mainwp_child_remove_readme', 'heatMapEnabled', 'mainwp_child_clone_sites', 'mainwp_child_pluginDir', 'mainwp_premium_updates', 'mainwp_child_activated_once', 'mainwp_maintenance_opt_alert_404', 'mainwp_maintenance_opt_alert_404_email', 'mainwp_ext_code_snippets', 'mainwp_ext_snippets_enabled', 'mainwp_temp_clone_plugins', 'mainwp_temp_clone_themes', 'mainwp_child_click_data', 'mainwp_child_clone_from_server_last_folder', 'mainwp_child_clone_permalink', 'mainwp_child_restore_permalink', 'mainwp_keyword_links_htaccess_set', 'mainwp_kwl_options', 'mainwp_kwl_keyword_links', 'mainwp_kwl_click_statistic_data', 'mainwp_kwl_statistic_data_', 'mainwp_kwl_enable_statistic', 'mainwpKeywordLinks', 'mainwp_branding_ext_enabled', 'mainwp_branding_plugin_header', 'mainwp_branding_support_email', 'mainwp_branding_support_message', 'mainwp_branding_remove_restore', 'mainwp_branding_remove_setting', 'mainwp_branding_remove_wp_tools', 'mainwp_branding_remove_wp_setting', 'mainwp_branding_remove_permalink', 'mainwp_branding_button_contact_label', 'mainwp_branding_send_email_message', 'mainwp_branding_message_return_sender', 'mainwp_branding_submit_button_title', 'mainwp_branding_disable_wp_branding', 'mainwp_branding_extra_settings', 'mainwp_branding_child_hide', 'mainwp_branding_show_support', 'mainwp_branding_disable_change');
             foreach ($options as $option)
             {
-                MainWPHelper::fix_option($option);
+                Main_WP_Helper::fix_option($option);
             }
         }
         else if (($update_version === false) || ($update_version == '1.0') || ($update_version == '1.1'))
@@ -157,7 +159,7 @@ class MainWPChild
             $options = array('mainwp_child_pubkey', 'mainwp_child_branding_disconnected', 'mainwp_branding_plugin_header', 'mainwp_child_update_version', 'mainwp_child_auth', 'mainwp_child_clone_permalink', 'mainwp_child_restore_permalink', 'mainwp_ext_snippets_enabled', 'mainwp_child_fix_htaccess', 'mainwp_child_pluginDir', 'mainwp_child_htaccess_set', 'heatMapEnabled', 'heatMapsIndividualOverrideSetting', 'heatMapExtensionLoaded', 'heatMapsIndividualDisable', 'mainwp_child_nossl', 'mainwp_updraftplus_ext_enabled', 'mainwpKeywordLinks', 'mainwp_keyword_links_htaccess_set', 'mainwp_branding_button_contact_label', 'mainwp_branding_extra_settings', 'mainwp_branding_ext_enabled', 'mainwp_creport_ext_branding_enabled', 'mainwp_pagespeed_ext_enabled', 'mainwp_linkschecker_ext_enabled', 'mainwp_wordfence_ext_enabled', 'mainwp_ithemes_ext_enabled', 'mainwp_maintenance_opt_alert_404');
             foreach ($options as $option)
             {
-                MainWPHelper::fix_option($option, 'yes');
+                Main_WP_Helper::fix_option($option, 'yes');
             }
 
             if (!is_array(get_option('mainwp_security')))
@@ -179,11 +181,11 @@ class MainWPChild
                     $value = get_option($old);
                     $security[$option] = ($value == 'T');
                 }
-                MainWPHelper::update_option('mainwp_security', $security, 'yes');
+                Main_WP_Helper::update_option('mainwp_security', $security, 'yes');
             }
         }
 
-        MainWPHelper::update_option('mainwp_child_update_version', $this->update_version, 'yes');
+        Main_WP_Helper::update_option('mainwp_child_update_version', $this->update_version, 'yes');
     }
 
     public function admin_notice()
@@ -195,14 +197,14 @@ class MainWPChild
                 $child_name = ($this->branding_robust === "MainWP") ? "MainWP Child" : $this->branding_robust;
                 $msg = '<div class="postbox" style="padding-left: 1em; padding-right: 1em; margin-top: 4em;"><p style="text-align: center; background: #dd3d36; color: #fff; font-size: 22px; font-weight: bold;">Attention!</p>' .
                       '<p style="font-size: 16px;">Please add this site to your ' . $this->branding_robust . ' Dashboard <b>NOW</b> or deactivate the ' . $child_name . ' plugin until you are ready to do so to avoid unexpected security issues.</p>' ;                
-                if (!MainWPChildBranding::is_branding()) 
+                if (!Main_WP_Child_Branding::is_branding()) 
                     $msg .= '<p>You can also turn on the Unique Security ID option in <a href="admin.php?page=mainwp_child_tab">' . $this->branding_robust . ' settings</a> if you would like extra security and additional time to add this site to your Dashboard.   Find out more in this Help Doc <a href="http://docs.mainwp.com/how-do-i-use-the-child-unique-security-id/" target="_blank">How do I use the Child Unique Security ID?</a></p>';                      
                 $msg .= '</div>';
                 echo $msg;      
             }
         }
 
-        MainWPChildServerInformation::showWarnings();
+        Main_WP_Child_Server_Information::showWarnings();
     }
 
     public function localization()
@@ -230,9 +232,9 @@ class MainWPChild
             }
             $newI = $this->maxHistory + 1;
             while (isset($auths[$newI])) unset($auths[$newI++]);
-            $auths[$this->maxHistory] = md5(MainWPHelper::randString(14));
+            $auths[$this->maxHistory] = md5(Main_WP_Helper::randString(14));
             $auths['last'] = time();
-            MainWPHelper::update_option('mainwp_child_auth', $auths, 'yes');
+            Main_WP_Helper::update_option('mainwp_child_auth', $auths, 'yes');
         }
     }
 
@@ -302,8 +304,8 @@ class MainWPChild
             $remove_all_child_menu = true;
         }
 
-        $restorePage = add_submenu_page('import.php', $this->branding . ' Restore', $this->branding . ' Restore', 'read', 'mainwp-child-restore', array('MainWPClone', 'renderRestore'));
-        add_action('admin_print_scripts-'.$restorePage, array('MainWPClone', 'print_scripts'));
+        $restorePage = add_submenu_page('import.php', $this->branding . ' Restore', $this->branding . ' Restore', 'read', 'mainwp-child-restore', array('Main_WP_Clone', 'renderRestore'));
+        add_action('admin_print_scripts-'.$restorePage, array('Main_WP_Clone', 'print_scripts'));
         
         
         $sitesToClone = get_option('mainwp_child_clone_sites');
@@ -314,7 +316,7 @@ class MainWPChild
                 if (get_option('mainwp_branding_remove_server_info')) {
                     if ($sitesToClone != '0')
                     {
-                        $mainwp_child_menu_slug = "MainWPClone";
+                        $mainwp_child_menu_slug = "Main_WP_Clone";
                     } 
                     else
                     {
@@ -322,7 +324,7 @@ class MainWPChild
                     }
                         
                 } else {
-                    $mainwp_child_menu_slug = "MainWPChildServerInformation";
+                    $mainwp_child_menu_slug = "Main_WP_Child_Server_Information";
                 }                                
             }
         }
@@ -350,18 +352,18 @@ class MainWPChild
 
             if (!get_option('mainwp_branding_remove_server_info') || $cancelled_branding)
             {
-                add_submenu_page($mainwp_child_menu_slug, $child_page_title,  __($this->branding . ' Server Information','mainwp-child') , 'manage_options', 'MainWPChildServerInformation', array('MainWPChildServerInformation', 'renderPage'));
+                add_submenu_page($mainwp_child_menu_slug, $child_page_title,  __($this->branding . ' Server Information','mainwp-child') , 'manage_options', 'Main_WP_Child_Server_Information', array('Main_WP_Child_Server_Information', 'renderPage'));
             }
             
             if (!get_option('mainwp_branding_remove_restore') || $cancelled_branding)
             {                
                 if ($sitesToClone != '0')
                 {
-                    MainWPClone::init_menu($this->branding, $mainwp_child_menu_slug);
+                    Main_WP_Clone::init_menu($this->branding, $mainwp_child_menu_slug);
                 }
                 else
                 {
-                    MainWPClone::init_restore_menu($this->branding, $mainwp_child_menu_slug);
+                    Main_WP_Clone::init_restore_menu($this->branding, $mainwp_child_menu_slug);
                 }
             }
             $subpageargs = array(
@@ -374,7 +376,7 @@ class MainWPChild
     }
 
     function admin_init(){
-           MainWPChildBranding::admin_init();
+           Main_WP_Child_Branding::admin_init();
     }    
     
     function settings()
@@ -383,11 +385,11 @@ class MainWPChild
         {
             if (isset($_POST['requireUniqueSecurityId']))
             {
-                MainWPHelper::update_option('mainwp_child_uniqueId', MainWPHelper::randString(8));                
+                Main_WP_Helper::update_option('mainwp_child_uniqueId', Main_WP_Helper::randString(8));                
             }
             else
             {
-                MainWPHelper::update_option('mainwp_child_uniqueId', '');                
+                Main_WP_Helper::update_option('mainwp_child_uniqueId', '');                
             }
         }
         ?>
@@ -488,10 +490,10 @@ class MainWPChild
 
                 if (get_option('mainwp_child_onetime_htaccess') === false)
                 {
-                    MainWPHelper::update_option('mainwp_child_onetime_htaccess', true);
+                    Main_WP_Helper::update_option('mainwp_child_onetime_htaccess', true);
                 }
             }
-            MainWPHelper::update_option('mainwp_child_htaccess_set', 'yes', 'yes');
+            Main_WP_Helper::update_option('mainwp_child_htaccess_set', 'yes', 'yes');
         }
         else if ($hard)
         {
@@ -513,7 +515,7 @@ class MainWPChild
 
                 if (get_option('mainwp_child_onetime_htaccess') === false)
                 {
-                    MainWPHelper::update_option('mainwp_child_onetime_htaccess', true);
+                    Main_WP_Helper::update_option('mainwp_child_onetime_htaccess', true);
                 }
             }
         }
@@ -534,23 +536,23 @@ class MainWPChild
             }
             else if ($_POST['cloneFunc'] == 'deleteCloneBackup')
             {
-                $dirs = MainWPHelper::getMainWPDir('backup');
+                $dirs = Main_WP_Helper::getMainWPDir('backup');
                 $backupdir = $dirs[0];
                 $result = glob($backupdir . $_POST['f']);
                 if (count($result) == 0) return;
 
                 @unlink($result[0]);
-                MainWPHelper::write(array('result' => 'ok'));
+                Main_WP_Helper::write(array('result' => 'ok'));
             }
             else if ($_POST['cloneFunc'] == 'createCloneBackupPoll')
             {
-                $dirs = MainWPHelper::getMainWPDir('backup');
+                $dirs = Main_WP_Helper::getMainWPDir('backup');
                 $backupdir = $dirs[0];
                 $result = glob($backupdir . 'backup-'.$_POST['f'].'-*');
                 $archiveFile = false;
                 foreach ($result as $file)
                 {
-                    if (MainWPHelper::isArchive($file, 'backup-'.$_POST['f'].'-'))
+                    if (Main_WP_Helper::isArchive($file, 'backup-'.$_POST['f'].'-'))
                     {
                         $archiveFile = $file;
                         break;
@@ -558,21 +560,21 @@ class MainWPChild
                 }
                 if ($archiveFile === false) return;
 
-                MainWPHelper::write(array('size' => filesize($archiveFile)));
+                Main_WP_Helper::write(array('size' => filesize($archiveFile)));
             }
             else if ($_POST['cloneFunc'] == 'createCloneBackup')
             {
-                MainWPHelper::endSession();
+                Main_WP_Helper::endSession();
                 if (file_exists(WP_CONTENT_DIR . '/dbBackup.sql')) @unlink(WP_CONTENT_DIR . '/dbBackup.sql');
                 if (file_exists(ABSPATH . 'clone/config.txt')) @unlink(ABSPATH . 'clone/config.txt');
-                if (MainWPHelper::is_dir_empty(ABSPATH . 'clone')) @rmdir(ABSPATH . 'clone');
+                if (Main_WP_Helper::is_dir_empty(ABSPATH . 'clone')) @rmdir(ABSPATH . 'clone');
 
                 $wpversion = $_POST['wpversion'];
                 global $wp_version;
                 $includeCoreFiles = ($wpversion != $wp_version);
                 $excludes = (isset($_POST['exclude']) ? explode(',', $_POST['exclude']) : array());
                 $excludes[] = str_replace(ABSPATH, '', WP_CONTENT_DIR) . '/uploads/mainwp';
-                $uploadDir = MainWPHelper::getMainWPDir();
+                $uploadDir = Main_WP_Helper::getMainWPDir();
                 $uploadDir = $uploadDir[0];
                 $excludes[] = str_replace(ABSPATH, '', $uploadDir);
                 $excludes[] = str_replace(ABSPATH, '', WP_CONTENT_DIR) . '/object-cache.php';
@@ -587,7 +589,7 @@ class MainWPChild
                 $method = (!isset($_POST['zipmethod']) ? 'tar.gz' : $_POST['zipmethod']);
                 if ($method == 'tar.gz' && !function_exists('gzopen')) $method = 'zip';
 
-                $res = MainWPBackup::get()->createFullBackup($newExcludes, (isset($_POST['f']) ? $_POST['f'] : $_POST['file']), true, $includeCoreFiles, 0, false, false, false, false, $method);
+                $res = Main_WP_Backup::get()->createFullBackup($newExcludes, (isset($_POST['f']) ? $_POST['f'] : $_POST['file']), true, $includeCoreFiles, 0, false, false, false, false, $method);
                 if (!$res)
                 {
                     $information['backup'] = false;
@@ -623,7 +625,7 @@ class MainWPChild
                 @closedir($fh);
                 $information['themes'] = $themes;
 
-                MainWPHelper::write($information);
+                Main_WP_Helper::write($information);
             }
         }
 
@@ -644,7 +646,7 @@ class MainWPChild
             include_once(ABSPATH . '/wp-admin/includes/misc.php');
 
             $wp_rewrite->flush_rules();
-            MainWPHelper::update_option('mainwp_child_fix_htaccess', 'yes', 'yes');
+            Main_WP_Helper::update_option('mainwp_child_fix_htaccess', 'yes', 'yes');
         }
 
         $this->update_htaccess();
@@ -730,7 +732,7 @@ class MainWPChild
             $open_location = isset($_REQUEST['open_location']) ? $_REQUEST['open_location'] : '';  
             if (!empty($open_location)) {
                 $open_location = base64_decode ($open_location);
-                $_vars = MainWPHelper::parse_query($open_location);
+                $_vars = Main_WP_Helper::parse_query($open_location);
                 $_path = parse_url($open_location, PHP_URL_PATH);
                 if (isset($_vars['_mwpNoneName']) && isset($_vars['_mwpNoneValue'])) {
                     $_vars[$_vars['_mwpNoneName']] = wp_create_nonce($_vars['_mwpNoneValue']);
@@ -751,7 +753,7 @@ class MainWPChild
                 exit();
             }
             
-            add_filter('the_content', array(MainWPKeywordLinks::Instance(), 'filter_content'), 100, 2);            
+            add_filter('the_content', array(Main_WP_Keyword_Links::Instance(), 'filter_content'), 100, 2);            
             wp_redirect(admin_url($where));
             exit();
         }
@@ -765,12 +767,12 @@ class MainWPChild
             if ((get_option('heatMapsIndividualOverrideSetting') != '1' && get_option('heatMapEnabled') !== '0') ||
                 (get_option('heatMapsIndividualOverrideSetting') == '1' && get_option('heatMapsIndividualDisable') != '1')
                 )
-                 new MainWPHeatmapTracker();
+                 new Main_WP_Heatmap_Tracker();
         }
         /**
          * Security
          */
-        MainWPSecurity::fixAll();
+        Main_WP_Security::fixAll();
 		
         if (isset($_GET['mainwptest']))
         {
@@ -800,12 +802,12 @@ class MainWPChild
 
         if (!$auth && isset($_POST['mainwpsignature']))
         {
-            MainWPHelper::error(__('Authentication failed! Please deactivate and re-activate the MainWP Child plugin on this site.','mainwp-child'));
+            Main_WP_Helper::error(__('Authentication failed! Please deactivate and re-activate the MainWP Child plugin on this site.','mainwp-child'));
         }
 
         if (!$auth && isset($_POST['function']) && isset($this->callableFunctions[$_POST['function']]) && !isset($this->callableFunctionsNoAuth[$_POST['function']]))
         {
-            MainWPHelper::error(__('Authentication failed! Please deactivate and re-activate the MainWP Child plugin on this site.','mainwp-child'));
+            Main_WP_Helper::error(__('Authentication failed! Please deactivate and re-activate the MainWP Child plugin on this site.','mainwp-child'));
         }
 
         if ($auth)
@@ -816,12 +818,12 @@ class MainWPChild
                 $user = get_user_by('login', $_POST['user']);
                 if (!$user)
                 {
-                    MainWPHelper::error(__('No such user','mainwp-child'));
+                    Main_WP_Helper::error(__('No such user','mainwp-child'));
                 }
 
                 if ($user->wp_user_level != 10 && (!isset($user->user_level) || $user->user_level != 10) && !current_user_can('level_10'))
                 {
-                    MainWPHelper::error(__('User is not an administrator','mainwp-child'));
+                    Main_WP_Helper::error(__('User is not an administrator','mainwp-child'));
                 }
 
                 $this->login($_REQUEST['user']);
@@ -847,16 +849,16 @@ class MainWPChild
             }
         }
 
-        new MainWPChildIThemesSecurity();
+        new Main_WP_Child_iThemes_Security();
 
-        MainWPChildUpdraftplusBackups::Instance()->updraftplus_init();                    
+        Main_WP_Child_Updraftplus_Backups::Instance()->updraftplus_init();                    
         if ( version_compare( phpversion(), '5.3', '>=' ) ) {
-            MainWPChildBackUpWordPress::Instance()->init();
+            Main_WP_Child_Back_Up_WordPress::Instance()->init();
         }
         
-        MainWPChildWPRocket::Instance()->init();
+        Main_WP_Child_WP_Rocket::Instance()->init();
              
-        MainWPChildBackWPup::Instance()->init();
+        Main_WP_Child_Back_WP_Up::Instance()->init();
       
             //Call the function required
         if ($auth && isset($_POST['function']) && isset($this->callableFunctions[$_POST['function']]))
@@ -869,25 +871,25 @@ class MainWPChild
         }
 
         if (get_option('mainwpKeywordLinks') == 1) {
-            new MainWPKeywordLinks();
+            new Main_WP_Keyword_Links();
             if (!is_admin()) {
-                add_filter('the_content', array(MainWPKeywordLinks::Instance(), 'filter_content'), 100);
+                add_filter('the_content', array(Main_WP_Keyword_Links::Instance(), 'filter_content'), 100);
             }
-            MainWPKeywordLinks::Instance()->update_htaccess(); // if needed
-            MainWPKeywordLinks::Instance()->redirect_cloak();
+            Main_WP_Keyword_Links::Instance()->update_htaccess(); // if needed
+            Main_WP_Keyword_Links::Instance()->redirect_cloak();
         }
         else if (get_option('mainwp_keyword_links_htaccess_set') == 'yes')
         {
-            MainWPKeywordLinks::clear_htaccess(); // force clear
+            Main_WP_Keyword_Links::clear_htaccess(); // force clear
         }
 		
         // Branding extension
-        MainWPChildBranding::Instance()->branding_init();
-        MainWPClientReport::Instance()->creport_init();
-        MainWPChildPagespeed::Instance()->init();        
-        MainWPChildLinksChecker::Instance()->init();
-        MainWPChildWordfence::Instance()->wordfence_init();        
-        MainWPChildIThemesSecurity::Instance()->ithemes_init();
+        Main_WP_Child_Branding::Instance()->branding_init();
+        Main_WP_Client_Report::Instance()->creport_init();
+        Main_WP_Child_Pagespeed::Instance()->init();        
+        Main_WP_Child_Links_Checker::Instance()->init();
+        Main_WP_Child_Wordfence::Instance()->wordfence_init();        
+        Main_WP_Child_iThemes_Security::Instance()->ithemes_init();
     }
 
     function default_option_active_plugins($default)
@@ -978,7 +980,7 @@ class MainWPChild
 
         if (!isset($_POST['type']) || !isset($_POST['url']) || ($_POST['type'] != 'plugin' && $_POST['type'] != 'theme') || $_POST['url'] == '')
         {
-            MainWPHelper::error(__('Bad request.','mainwp-child'));
+            Main_WP_Helper::error(__('Bad request.','mainwp-child'));
         }
 //        if (file_exists(ABSPATH . '/wp-admin/includes/deprecated.php')) include_once(ABSPATH . '/wp-admin/includes/deprecated.php');
         if (file_exists(ABSPATH . '/wp-admin/includes/screen.php')) include_once(ABSPATH . '/wp-admin/includes/screen.php');
@@ -1029,11 +1031,11 @@ class MainWPChild
                 $error = $result->get_error_codes();
                 if (is_array($error))
                 {
-                    MainWPHelper::error(implode(', ', $error));
+                    Main_WP_Helper::error(implode(', ', $error));
                 }
                 else
                 {
-                    MainWPHelper::error($error);
+                    Main_WP_Helper::error($error);
                 }
             }         
             
@@ -1093,7 +1095,7 @@ class MainWPChild
         }
         $information['installation'] = 'SUCCESS';
         $information['destination_name'] = $result['destination_name'];
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     //This will upgrade WP
@@ -1190,7 +1192,7 @@ class MainWPChild
         if ($this->filterFunction != null) remove_filter( 'pre_site_transient_update_core', $this->filterFunction, 99 );
         if ($this->filterFunction != null) remove_filter( 'pre_transient_update_core', $this->filterFunction, 99 );
 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     /**
@@ -1202,7 +1204,7 @@ class MainWPChild
         //Prevent disable/re-enable at upgrade
         define('DOING_CRON', true);
 
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
 
         include_once(ABSPATH . '/wp-admin/includes/class-wp-upgrader.php');
 //        if (file_exists(ABSPATH . '/wp-admin/includes/deprecated.php')) include_once(ABSPATH . '/wp-admin/includes/deprecated.php');
@@ -1282,7 +1284,7 @@ class MainWPChild
                 }
                 else
                 {
-                    MainWPHelper::error(__('Bad request','mainwp-child'));
+                    Main_WP_Helper::error(__('Bad request','mainwp-child'));
                 }
             }
             if (count($premiumPlugins) > 0)
@@ -1309,7 +1311,7 @@ class MainWPChild
 
             if (count($plugins) <= 0 && count($premiumPlugins) <= 0)
             {
-                MainWPHelper::error(__('Bad request','mainwp-child'));
+                Main_WP_Helper::error(__('Bad request','mainwp-child'));
             }
 
             if ($this->filterFunction != null) remove_filter( 'pre_site_transient_update_plugins', $this->filterFunction , 99);
@@ -1373,7 +1375,7 @@ class MainWPChild
                 }
                 else
                 {
-                    MainWPHelper::error(__('Bad request','mainwp-child'));
+                    Main_WP_Helper::error(__('Bad request','mainwp-child'));
                 }
             }
             if (count($premiumThemes) > 0)
@@ -1402,14 +1404,14 @@ class MainWPChild
             }
             if (count($themes) <= 0 && count($premiumThemes) <= 0)
             {
-                MainWPHelper::error(__('Bad request','mainwp-child'));
+                Main_WP_Helper::error(__('Bad request','mainwp-child'));
             }
 
             if ($this->filterFunction != null) remove_filter( 'pre_site_transient_update_themes', $this->filterFunction , 99);
         }
         else
         {
-            MainWPHelper::error(__('Bad request','mainwp-child'));
+            Main_WP_Helper::error(__('Bad request','mainwp-child'));
         }
 
         if (count($mwp_premium_updates_todo) > 0)
@@ -1479,7 +1481,7 @@ class MainWPChild
             }
         }
         $information['sync'] = $this->getSiteStats(array(), false);
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function hookFixOptimizePressThemeUpdate($transient) {
@@ -1523,26 +1525,26 @@ class MainWPChild
         //Check if the user is valid & login
         if (!isset($_POST['user']) || !isset($_POST['pubkey']))
         {
-            MainWPHelper::error(__('Invalid request','mainwp-child'));
+            Main_WP_Helper::error(__('Invalid request','mainwp-child'));
         }
 
-        MainWPHelper::update_option('mainwp_child_branding_disconnected', 'yes', 'yes');
+        Main_WP_Helper::update_option('mainwp_child_branding_disconnected', 'yes', 'yes');
 
         //Already added - can't readd. Deactivate plugin..
         if (get_option('mainwp_child_pubkey'))
         {
-            MainWPHelper::error(__('Public key already set, reset the MainWP plugin on your site and try again.','mainwp-child'));
+            Main_WP_Helper::error(__('Public key already set, reset the MainWP plugin on your site and try again.','mainwp-child'));
         }        
         
         if (get_option('mainwp_child_uniqueId') != '')
         {
             if (!isset($_POST['uniqueId']) || ($_POST['uniqueId'] == ''))
             {
-                MainWPHelper::error(__('This Child Site is set to require a Unique Security ID - Please Enter It before connection can be established.','mainwp-child'));
+                Main_WP_Helper::error(__('This Child Site is set to require a Unique Security ID - Please Enter It before connection can be established.','mainwp-child'));
             }
             else if (get_option('mainwp_child_uniqueId') != $_POST['uniqueId'])
             {
-                MainWPHelper::error(__('The Unique Security ID you have entered does not match Child Security ID - Please Correct It before connection can be established.','mainwp-child'));
+                Main_WP_Helper::error(__('The Unique Security ID you have entered does not match Child Security ID - Please Correct It before connection can be established.','mainwp-child'));
             }
         }
 
@@ -1551,24 +1553,24 @@ class MainWPChild
         {
             if (!$this->login($_POST['user']))
             {
-                MainWPHelper::error(__('No such user','mainwp-child'));
+                Main_WP_Helper::error(__('No such user','mainwp-child'));
             }
             if ($current_user->wp_user_level != 10 && (!isset($current_user->user_level) || $current_user->user_level != 10) && !current_user_can('level_10'))
             {
-                MainWPHelper::error(__('User is not an administrator','mainwp-child'));
+                Main_WP_Helper::error(__('User is not an administrator','mainwp-child'));
             }
         }
 
-        MainWPHelper::update_option('mainwp_child_pubkey', base64_encode($_POST['pubkey']), 'yes'); //Save the public key
-        MainWPHelper::update_option('mainwp_child_server', $_POST['server']); //Save the public key
-        MainWPHelper::update_option('mainwp_child_nonce', 0); //Save the nonce
+        Main_WP_Helper::update_option('mainwp_child_pubkey', base64_encode($_POST['pubkey']), 'yes'); //Save the public key
+        Main_WP_Helper::update_option('mainwp_child_server', $_POST['server']); //Save the public key
+        Main_WP_Helper::update_option('mainwp_child_nonce', 0); //Save the nonce
 
-        MainWPHelper::update_option('mainwp_child_nossl', ($_POST['pubkey'] == '-1' || !function_exists('openssl_verify') ? 1 : 0), 'yes');
+        Main_WP_Helper::update_option('mainwp_child_nossl', ($_POST['pubkey'] == '-1' || !function_exists('openssl_verify') ? 1 : 0), 'yes');
         $information['nossl'] = ($_POST['pubkey'] == '-1' || !function_exists('openssl_verify') ? 1 : 0);
         $nossl_key = uniqid('', true);
-        MainWPHelper::update_option('mainwp_child_nossl_key', $nossl_key, 'yes');
+        Main_WP_Helper::update_option('mainwp_child_nossl_key', $nossl_key, 'yes');
         $information['nosslkey'] = $nossl_key;
-        MainWPHelper::update_option('mainwp_child_branding_disconnected', '', 'yes');
+        Main_WP_Helper::update_option('mainwp_child_branding_disconnected', '', 'yes');
 
         $information['register'] = 'OK';        
         $information['uniqueId'] = get_option('mainwp_child_uniqueId', '');
@@ -1590,18 +1592,18 @@ class MainWPChild
         if (isset($_POST['_ezin_post_category']))
             $new_post['_ezin_post_category'] = unserialize(base64_decode ($_POST['_ezin_post_category']));
 
-        $res = MainWPHelper::createPost($new_post, $post_custom, $post_category, $post_featured_image, $upload_dir, $post_tags);
+        $res = Main_WP_Helper::createPost($new_post, $post_custom, $post_category, $post_featured_image, $upload_dir, $post_tags);
         $created = $res['success'];
         if ($created != true)
         {
-            MainWPHelper::error($created);
+            Main_WP_Helper::error($created);
         }
 
         $information['added'] = true;
         $information['added_id'] = $res['added_id'];
         $information['link'] = $res['link'];
 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function post_action()
@@ -1629,12 +1631,12 @@ class MainWPChild
         }
         else if ($action == 'trash')
         {
-            add_action('trash_post', array('MainWPChildLinksChecker','hook_post_deleted'));
+            add_action('trash_post', array('Main_WP_Child_Links_Checker','hook_post_deleted'));
             wp_trash_post($postId);
         }
         else if ($action == 'delete')
         {
-            add_action('delete_post', array('MainWPChildLinksChecker','hook_post_deleted'));
+            add_action('delete_post', array('Main_WP_Child_Links_Checker','hook_post_deleted'));
             wp_delete_post($postId, true);
         }
         else if ($action == 'restore')
@@ -1663,7 +1665,7 @@ class MainWPChild
 
         if (!isset($information['status'])) $information['status'] = 'SUCCESS';
         $information['my_post'] = $my_post;
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function user_action()
@@ -1702,7 +1704,7 @@ class MainWPChild
         }
 
         if (!isset($information['status'])) $information['status'] = 'SUCCESS';
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     //todo: backwards compatible: wp_set_comment_status ?
@@ -1730,7 +1732,7 @@ class MainWPChild
         }
         else if ($action == 'trash')
         {
-            add_action('trashed_comment', array('MainWPChildLinksChecker', 'hook_trashed_comment'), 10, 1);
+            add_action('trashed_comment', array('Main_WP_Child_Links_Checker', 'hook_trashed_comment'), 10, 1);
             wp_trash_comment($commentId);
         }
         else if ($action == 'restore')
@@ -1747,7 +1749,7 @@ class MainWPChild
         }
 
         if (!isset($information['status'])) $information['status'] = 'SUCCESS';
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     //todo: backwards compatible: wp_set_comment_status ?
@@ -1798,7 +1800,7 @@ class MainWPChild
 
             }
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
 
@@ -1814,16 +1816,16 @@ class MainWPChild
         {
             if (is_wp_error($id))
             {
-                MainWPHelper::error($id->get_error_message());
+                Main_WP_Helper::error($id->get_error_message());
             }
             else
             {
-                MainWPHelper::error(__('Could not change the admin password.','mainwp-child'));
+                Main_WP_Helper::error(__('Could not change the admin password.','mainwp-child'));
             }
         }
 
         $information['added'] = true;
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function newUser()
@@ -1836,11 +1838,11 @@ class MainWPChild
 
         if (is_wp_error($new_user_id))
         {
-            MainWPHelper::error($new_user_id->get_error_message());
+            Main_WP_Helper::error($new_user_id->get_error_message());
         }
         if ($new_user_id == 0)
         {
-            MainWPHelper::error(__('Undefined error','mainwp-child'));
+            Main_WP_Helper::error(__('Undefined error','mainwp-child'));
         }
 
         if ($send_password)
@@ -1861,7 +1863,7 @@ class MainWPChild
             wp_mail($user_email, sprintf(__('[%s] Your username and password'), $blogname), $message);
         }
         $information['added'] = true;
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function cloneinfo()
@@ -1873,7 +1875,7 @@ class MainWPChild
         $information['site_url'] = get_option('site_url');
         $information['home'] = get_option('home');
 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function backupPoll()
@@ -1893,32 +1895,32 @@ class MainWPChild
             }
 
 
-            $dirs = MainWPHelper::getMainWPDir('backup');
+            $dirs = Main_WP_Helper::getMainWPDir('backup');
             $backupdir = $dirs[0];
             $result = glob($backupdir . $backupFile . '*');
             $archiveFile = false;
             foreach ($result as $file)
             {
-                if (MainWPHelper::isArchive($file, $backupFile, '(.*)'))
+                if (Main_WP_Helper::isArchive($file, $backupFile, '(.*)'))
                 {
                     $archiveFile = $file;
                     break;
                 }
             }
-            if ($archiveFile === false) MainWPHelper::write(array());
+            if ($archiveFile === false) Main_WP_Helper::write(array());
 
-            MainWPHelper::write(array('size' => filesize($archiveFile)));
+            Main_WP_Helper::write(array('size' => filesize($archiveFile)));
         }
         else
         {
             $backupFile = 'dbBackup-' . $fileNameUID . '-*.sql';
 
-            $dirs = MainWPHelper::getMainWPDir('backup');
+            $dirs = Main_WP_Helper::getMainWPDir('backup');
             $backupdir = $dirs[0];
             $result = glob($backupdir . $backupFile . '*');
-            if (count($result) == 0) MainWPHelper::write(array());
+            if (count($result) == 0) Main_WP_Helper::write(array());
 
-            MainWPHelper::write(array('size' => filesize($result[0])));
+            Main_WP_Helper::write(array('size' => filesize($result[0])));
             exit();
         }
     }
@@ -1927,7 +1929,7 @@ class MainWPChild
     {
         $pid = $_POST['pid'];
 
-        $dirs = MainWPHelper::getMainWPDir('backup');
+        $dirs = Main_WP_Helper::getMainWPDir('backup');
         $backupdir = $dirs[0];
 
         $information = array();
@@ -1935,7 +1937,7 @@ class MainWPChild
         /** @var $wp_filesystem WP_Filesystem_Base */
         global $wp_filesystem;
 
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
 
         $pidFile = trailingslashit($backupdir) . 'backup-' . $pid . '.pid';
         $doneFile = trailingslashit($backupdir) . 'backup-' . $pid . '.done';
@@ -1976,7 +1978,7 @@ class MainWPChild
             $information['status'] = 'invalid';
         }
 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function backup($pWrite = true)
@@ -1984,24 +1986,24 @@ class MainWPChild
         $timeout = 20 * 60 * 60; //20minutes
         @set_time_limit($timeout);
         @ini_set('max_execution_time', $timeout);
-        MainWPHelper::endSession();
+        Main_WP_Helper::endSession();
 
 
         //Cleanup pid files!
-        $dirs = MainWPHelper::getMainWPDir('backup');
+        $dirs = Main_WP_Helper::getMainWPDir('backup');
         $backupdir = trailingslashit($dirs[0]);
 
 
         /** @var $wp_filesystem WP_Filesystem_Base */
         global $wp_filesystem;
 
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
 
         $files = glob($backupdir . '*');
         //Find old files (changes > 3 hr)
         foreach ($files as $file)
         {
-            if (MainWPHelper::endsWith($file, '/index.php') | MainWPHelper::endsWith($file, '/.htaccess')) continue;
+            if (Main_WP_Helper::endsWith($file, '/index.php') | Main_WP_Helper::endsWith($file, '/.htaccess')) continue;
 
             if ((time() - filemtime($file)) > (60 * 60 * 3))
             {
@@ -2014,7 +2016,7 @@ class MainWPChild
         {
             $excludes = (isset($_POST['exclude']) ? explode(',', $_POST['exclude']) : array());
             $excludes[] = str_replace(ABSPATH, '', WP_CONTENT_DIR) . '/uploads/mainwp';
-            $uploadDir = MainWPHelper::getMainWPDir();
+            $uploadDir = Main_WP_Helper::getMainWPDir();
             $uploadDir = $uploadDir[0];
             $excludes[] = str_replace(ABSPATH, '', $uploadDir);
             $excludes[] = str_replace(ABSPATH, '', WP_CONTENT_DIR) . '/object-cache.php';
@@ -2146,7 +2148,7 @@ class MainWPChild
 
             $append = (isset($_POST['append']) && ($_POST['append'] == '1'));
 
-            $res = MainWPBackup::get()->createFullBackup($newExcludes, $fileName, true, true, $file_descriptors, $file, $excludezip, $excludenonwp, $loadFilesBeforeZip, $ext, $pid, $append);
+            $res = Main_WP_Backup::get()->createFullBackup($newExcludes, $fileName, true, true, $file_descriptors, $file, $excludezip, $excludenonwp, $loadFilesBeforeZip, $ext, $pid, $append);
             if (!$res)
             {
                 $information['full'] = false;
@@ -2184,14 +2186,14 @@ class MainWPChild
             $information['db'] = false;
         }
 
-        if ($pWrite) MainWPHelper::write($information);
+        if ($pWrite) Main_WP_Helper::write($information);
 
         return $information;
     }
 
     protected function backupDB($fileName = '', $ext = 'zip')
     {
-        $dirs = MainWPHelper::getMainWPDir('backup');
+        $dirs = Main_WP_Helper::getMainWPDir('backup');
         $dir = $dirs[0];
         $timestamp = time();
         if ($fileName != '') $fileName .= '-';
@@ -2214,9 +2216,9 @@ class MainWPChild
             @unlink($filepath);
         }
 
-        $result = MainWPBackup::get()->createBackupDB($filepath, $ext);
+        $result = Main_WP_Backup::get()->createBackupDB($filepath, $ext);
 
-        MainWPHelper::update_option('mainwp_child_last_db_backup_size', filesize($result['filepath']));
+        Main_WP_Helper::update_option('mainwp_child_last_db_backup_size', filesize($result['filepath']));
 
         return ($result === false) ? false : array(
             'timestamp' => $timestamp,
@@ -2240,56 +2242,56 @@ class MainWPChild
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'listing')
         {
-            MainWPSecurity::prevent_listing();
-            $information['listing'] = (!MainWPSecurity::prevent_listing_ok() ? 'N' : 'Y');
+            Main_WP_Security::prevent_listing();
+            $information['listing'] = (!Main_WP_Security::prevent_listing_ok() ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'wp_version')
         {
             $security['wp_version'] = true;
-            MainWPSecurity::remove_wp_version(true);
-            $information['wp_version'] = (!MainWPSecurity::remove_wp_version_ok() ? 'N' : 'Y');
+            Main_WP_Security::remove_wp_version(true);
+            $information['wp_version'] = (!Main_WP_Security::remove_wp_version_ok() ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'rsd')
         {
             $security['rsd'] = true;
-            MainWPSecurity::remove_rsd(true);
-            $information['rsd'] = (!MainWPSecurity::remove_rsd_ok() ? 'N' : 'Y');
+            Main_WP_Security::remove_rsd(true);
+            $information['rsd'] = (!Main_WP_Security::remove_rsd_ok() ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'wlw')
         {
             $security['wlw'] = true;
-            MainWPSecurity::remove_wlw(true);
-            $information['wlw'] = (!MainWPSecurity::remove_wlw_ok() ? 'N' : 'Y');
+            Main_WP_Security::remove_wlw(true);
+            $information['wlw'] = (!Main_WP_Security::remove_wlw_ok() ? 'N' : 'Y');
         }
 
 //        if ($_POST['feature'] == 'all' || $_POST['feature'] == 'core_updates')
 //        {
 //            $security['core_updates'] = true;
-//            MainWPSecurity::remove_core_update(true);
-//            $information['core_updates'] = (!MainWPSecurity::remove_core_update_ok() ? 'N' : 'Y');
+//            Main_WP_Security::remove_core_update(true);
+//            $information['core_updates'] = (!Main_WP_Security::remove_core_update_ok() ? 'N' : 'Y');
 //        }
 
 //        if ($_POST['feature'] == 'all' || $_POST['feature'] == 'plugin_updates')
 //        {
 //            $security['plugin_updates'] = true;
-//            MainWPSecurity::remove_plugin_update(true);
-//            $information['plugin_updates'] = (!MainWPSecurity::remove_plugin_update_ok() ? 'N' : 'Y');
+//            Main_WP_Security::remove_plugin_update(true);
+//            $information['plugin_updates'] = (!Main_WP_Security::remove_plugin_update_ok() ? 'N' : 'Y');
 //        }
 
 //        if ($_POST['feature'] == 'all' || $_POST['feature'] == 'theme_updates')
 //        {
 //            $security['theme_updates'] = true;
-//            MainWPSecurity::remove_theme_update(true);
-//            $information['theme_updates'] = (!MainWPSecurity::remove_theme_update_ok() ? 'N' : 'Y');
+//            Main_WP_Security::remove_theme_update(true);
+//            $information['theme_updates'] = (!Main_WP_Security::remove_theme_update_ok() ? 'N' : 'Y');
 //        }
 
 //        if ($_POST['feature'] == 'all' || $_POST['feature'] == 'file_perms')
 //        {
-//            MainWPSecurity::fix_file_permissions();
-//            $information['file_perms'] = (!MainWPSecurity::fix_file_permissions_ok() ? 'N' : 'Y');
+//            Main_WP_Security::fix_file_permissions();
+//            $information['file_perms'] = (!Main_WP_Security::fix_file_permissions_ok() ? 'N' : 'Y');
 //            if ($information['file_perms'] == 'N')
 //            {
 //                $information['file_perms'] = 'Could not change all the file permissions';
@@ -2298,46 +2300,46 @@ class MainWPChild
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'db_reporting')
         {
-            MainWPSecurity::remove_database_reporting();
-            $information['db_reporting'] = (!MainWPSecurity::remove_database_reporting_ok() ? 'N' : 'Y');
+            Main_WP_Security::remove_database_reporting();
+            $information['db_reporting'] = (!Main_WP_Security::remove_database_reporting_ok() ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'php_reporting')
         {
             $security['php_reporting'] = true;
-            MainWPSecurity::remove_php_reporting(true);
-            $information['php_reporting'] = (!MainWPSecurity::remove_php_reporting_ok() ? 'N' : 'Y');
+            Main_WP_Security::remove_php_reporting(true);
+            $information['php_reporting'] = (!Main_WP_Security::remove_php_reporting_ok() ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'versions')
         {
             $security['scripts_version'] = true;
             $security['styles_version'] = true;
-            MainWPSecurity::remove_scripts_version(true);
-            MainWPSecurity::remove_styles_version(true);
-            $information['versions'] = (!MainWPSecurity::remove_scripts_version_ok() || !MainWPSecurity::remove_styles_version_ok()
+            Main_WP_Security::remove_scripts_version(true);
+            Main_WP_Security::remove_styles_version(true);
+            $information['versions'] = (!Main_WP_Security::remove_scripts_version_ok() || !Main_WP_Security::remove_styles_version_ok()
                     ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'admin')
         {
-            $information['admin'] = (!MainWPSecurity::admin_user_ok() ? 'N' : 'Y');
+            $information['admin'] = (!Main_WP_Security::admin_user_ok() ? 'N' : 'Y');
         }
 
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'readme')
         {
             $security['readme'] = true;
-            MainWPSecurity::remove_readme(true);
-            $information['readme'] = (MainWPSecurity::remove_readme_ok() ? 'Y' : 'N');
+            Main_WP_Security::remove_readme(true);
+            $information['readme'] = (Main_WP_Security::remove_readme_ok() ? 'Y' : 'N');
         }
 
-        MainWPHelper::update_option('mainwp_security', $security, 'yes');
+        Main_WP_Helper::update_option('mainwp_security', $security, 'yes');
 
         if ($sync)
         {
             $information['sync'] = $this->getSiteStats(array(), false);
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function doSecurityUnFix()
@@ -2386,39 +2388,39 @@ class MainWPChild
         if ($_POST['feature'] == 'all' || $_POST['feature'] == 'readme')
         {
             $security['readme'] = false;
-            $information['readme'] = MainWPSecurity::remove_readme_ok();
+            $information['readme'] = Main_WP_Security::remove_readme_ok();
         }
 
-        MainWPHelper::update_option('mainwp_security', $security, 'yes');
+        Main_WP_Helper::update_option('mainwp_security', $security, 'yes');
 
         if ($sync)
         {
             $information['sync'] = $this->getSiteStats(array(), false);
         }
 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function getSecurityStats()
     {
         $information = array();
 
-        $information['listing'] = (!MainWPSecurity::prevent_listing_ok() ? 'N' : 'Y');
-        $information['wp_version'] = (!MainWPSecurity::remove_wp_version_ok() ? 'N' : 'Y');
-        $information['rsd'] = (!MainWPSecurity::remove_rsd_ok() ? 'N' : 'Y');
-        $information['wlw'] = (!MainWPSecurity::remove_wlw_ok() ? 'N' : 'Y');
-//        $information['core_updates'] = (!MainWPSecurity::remove_core_update_ok() ? 'N' : 'Y');
-//        $information['plugin_updates'] = (!MainWPSecurity::remove_plugin_update_ok() ? 'N' : 'Y');
-//        $information['theme_updates'] = (!MainWPSecurity::remove_theme_update_ok() ? 'N' : 'Y');
-//        $information['file_perms'] = (!MainWPSecurity::fix_file_permissions_ok() ? 'N' : 'Y');
-        $information['db_reporting'] = (!MainWPSecurity::remove_database_reporting_ok() ? 'N' : 'Y');
-        $information['php_reporting'] = (!MainWPSecurity::remove_php_reporting_ok() ? 'N' : 'Y');
-        $information['versions'] = (!MainWPSecurity::remove_scripts_version_ok() || !MainWPSecurity::remove_styles_version_ok()
+        $information['listing'] = (!Main_WP_Security::prevent_listing_ok() ? 'N' : 'Y');
+        $information['wp_version'] = (!Main_WP_Security::remove_wp_version_ok() ? 'N' : 'Y');
+        $information['rsd'] = (!Main_WP_Security::remove_rsd_ok() ? 'N' : 'Y');
+        $information['wlw'] = (!Main_WP_Security::remove_wlw_ok() ? 'N' : 'Y');
+//        $information['core_updates'] = (!Main_WP_Security::remove_core_update_ok() ? 'N' : 'Y');
+//        $information['plugin_updates'] = (!Main_WP_Security::remove_plugin_update_ok() ? 'N' : 'Y');
+//        $information['theme_updates'] = (!Main_WP_Security::remove_theme_update_ok() ? 'N' : 'Y');
+//        $information['file_perms'] = (!Main_WP_Security::fix_file_permissions_ok() ? 'N' : 'Y');
+        $information['db_reporting'] = (!Main_WP_Security::remove_database_reporting_ok() ? 'N' : 'Y');
+        $information['php_reporting'] = (!Main_WP_Security::remove_php_reporting_ok() ? 'N' : 'Y');
+        $information['versions'] = (!Main_WP_Security::remove_scripts_version_ok() || !Main_WP_Security::remove_styles_version_ok()
                 ? 'N' : 'Y');
-        $information['admin'] = (!MainWPSecurity::admin_user_ok() ? 'N' : 'Y');
-        $information['readme'] = (MainWPSecurity::remove_readme_ok() ? 'Y' : 'N');
+        $information['admin'] = (!Main_WP_Security::admin_user_ok() ? 'N' : 'Y');
+        $information['readme'] = (Main_WP_Security::remove_readme_ok() ? 'Y' : 'N');
 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function updateExternalSettings()
@@ -2435,13 +2437,13 @@ class MainWPChild
             if ($_POST['heatMap'] == '1')
             {
                 if (get_option('heatMapEnabled') != '1') $update_htaccess = true;
-                MainWPHelper::update_option('heatMapEnabled', '1', 'yes');
-                MainWPHelper::update_option('heatMapExtensionLoaded', 'yes', 'yes');
+                Main_WP_Helper::update_option('heatMapEnabled', '1', 'yes');
+                Main_WP_Helper::update_option('heatMapExtensionLoaded', 'yes', 'yes');
             }
             else
             {
                 if (get_option('heatMapEnabled') != '0') $update_htaccess = true;
-                MainWPHelper::update_option('heatMapEnabled', '0', 'yes');
+                Main_WP_Helper::update_option('heatMapEnabled', '0', 'yes');
             }
         }
 
@@ -2450,11 +2452,11 @@ class MainWPChild
             if ($_POST['cloneSites'] != '0')
             {
                 $arr = @json_decode(urldecode($_POST['cloneSites']), 1);
-                MainWPHelper::update_option('mainwp_child_clone_sites', (!is_array($arr) ? array() : $arr));
+                Main_WP_Helper::update_option('mainwp_child_clone_sites', (!is_array($arr) ? array() : $arr));
             }
             else
             {
-                MainWPHelper::update_option('mainwp_child_clone_sites', '0');
+                Main_WP_Helper::update_option('mainwp_child_clone_sites', '0');
             }
         }
 
@@ -2462,13 +2464,13 @@ class MainWPChild
         {
             if (get_option('mainwp_child_pluginDir') != $_POST['pluginDir'])
             {
-                MainWPHelper::update_option('mainwp_child_pluginDir', $_POST['pluginDir'], 'yes');
+                Main_WP_Helper::update_option('mainwp_child_pluginDir', $_POST['pluginDir'], 'yes');
                 $update_htaccess = true;
             }
         }
         else if (get_option('mainwp_child_pluginDir') != false)
         {
-            MainWPHelper::update_option('mainwp_child_pluginDir', false, 'yes');
+            Main_WP_Helper::update_option('mainwp_child_pluginDir', false, 'yes');
             $update_htaccess = true;
         }
 
@@ -2485,17 +2487,17 @@ class MainWPChild
 
         if ($exit) $this->updateExternalSettings();
 
-        MainWPHelper::update_option('mainwp_child_branding_disconnected', '', 'yes');
+        Main_WP_Helper::update_option('mainwp_child_branding_disconnected', '', 'yes');
         if (isset($_POST['server']))
-            MainWPHelper::update_option('mainwp_child_server', $_POST['server']); 
+            Main_WP_Helper::update_option('mainwp_child_server', $_POST['server']); 
         
         if (isset($_POST['numberdaysOutdatePluginTheme']) && !empty($_POST['numberdaysOutdatePluginTheme'])) {
             $days_outdate = get_option( 'mainwp_child_plugintheme_days_outdate', 365 );
             if ($days_outdate != $_POST['numberdaysOutdatePluginTheme']) {
                 $days_outdate = $_POST['numberdaysOutdatePluginTheme'];
-                MainWPHelper::update_option('mainwp_child_plugintheme_days_outdate', $days_outdate); 
-                MainWPChildPluginsCheck::Instance()->cleanup_deactivation(false);
-                MainWPChildThemesCheck::Instance()->cleanup_deactivation(false);
+                Main_WP_Helper::update_option('mainwp_child_plugintheme_days_outdate', $days_outdate); 
+                Main_WP_Child_Plugins_Check::Instance()->cleanup_deactivation(false);
+                Main_WP_Child_Themes_Check::Instance()->cleanup_deactivation(false);
             }
         }
         
@@ -2589,7 +2591,7 @@ class MainWPChild
                 $information['premium_updates'][$slug]['update'] = (object)array('new_version' => $new_version, 'premium' => true, 'slug' => $slug);
                 if (!in_array($slug, $premiumUpdates)) $premiumUpdates[] = $slug;
             }
-            MainWPHelper::update_option('mainwp_premium_updates', $premiumUpdates);
+            Main_WP_Helper::update_option('mainwp_premium_updates', $premiumUpdates);
         }
 
         remove_filter('default_option_active_plugins', array(&$this, 'default_option_active_plugins'));
@@ -2637,19 +2639,19 @@ class MainWPChild
         $information['recent_pages'] = $this->get_recent_posts(array('publish', 'draft', 'pending', 'trash'), 5, 'page');
 
         $securityIssuess = 0;
-        if (!MainWPSecurity::prevent_listing_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_wp_version_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_rsd_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_wlw_ok()) $securityIssuess++;
-//        if (!MainWPSecurity::remove_core_update_ok()) $securityIssuess++;
-//        if (!MainWPSecurity::remove_plugin_update_ok()) $securityIssuess++;
-//        if (!MainWPSecurity::remove_theme_update_ok()) $securityIssuess++;
-//        if (!MainWPSecurity::fix_file_permissions_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_database_reporting_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_php_reporting_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_scripts_version_ok() || !MainWPSecurity::remove_styles_version_ok()) $securityIssuess++;
-        if (!MainWPSecurity::admin_user_ok()) $securityIssuess++;
-        if (!MainWPSecurity::remove_readme_ok()) $securityIssuess++;
+        if (!Main_WP_Security::prevent_listing_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_wp_version_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_rsd_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_wlw_ok()) $securityIssuess++;
+//        if (!Main_WP_Security::remove_core_update_ok()) $securityIssuess++;
+//        if (!Main_WP_Security::remove_plugin_update_ok()) $securityIssuess++;
+//        if (!Main_WP_Security::remove_theme_update_ok()) $securityIssuess++;
+//        if (!Main_WP_Security::fix_file_permissions_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_database_reporting_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_php_reporting_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_scripts_version_ok() || !Main_WP_Security::remove_styles_version_ok()) $securityIssuess++;
+        if (!Main_WP_Security::admin_user_ok()) $securityIssuess++;
+        if (!Main_WP_Security::remove_readme_ok()) $securityIssuess++;
 
         $information['securityIssues'] = $securityIssuess;
 
@@ -2663,7 +2665,7 @@ class MainWPChild
         }
         $information['categories'] = $categories;
         $information['totalsize'] = $this->getTotalFileSize();
-        $information['dbsize'] = MainWPChildDB::get_size();
+        $information['dbsize'] = Main_WP_Child_DB::get_size();
 
         $auths = get_option('mainwp_child_auth');
         $information['extauth'] = ($auths && isset($auths[$this->maxHistory]) ? $auths[$this->maxHistory] : null);
@@ -2729,21 +2731,21 @@ class MainWPChild
             do_action("mainwp-site-sync-others-data", $othersData);
 
             if (isset($othersData['syncUpdraftData']) && $othersData['syncUpdraftData']) {
-                if (MainWPChildUpdraftplusBackups::isActivatedUpdraftplus()) {
-                    $information['syncUpdraftData'] =   MainWPChildUpdraftplusBackups::Instance()->syncData();
+                if (Main_WP_Child_Updraftplus_Backups::isActivatedUpdraftplus()) {
+                    $information['syncUpdraftData'] =   Main_WP_Child_Updraftplus_Backups::Instance()->syncData();
                 }
             }
             if ( version_compare( phpversion(), '5.3', '>=' ) ) {
                 if (isset($othersData['syncBackUpWordPress']) && $othersData['syncBackUpWordPress']) {
-                    if (MainWPChildBackUpWordPress::isActivated()) {
-                        $information['syncBackUpWordPress'] =   MainWPChildBackUpWordPress::Instance()->syncData();
+                    if (Main_WP_Child_Back_Up_WordPress::isActivated()) {
+                        $information['syncBackUpWordPress'] =   Main_WP_Child_Back_Up_WordPress::Instance()->syncData();
                     }
                 }
             }
             
             if (isset($othersData['syncWPRocketData']) && ($othersData['syncWPRocketData'] == 'yes')) {                
                 $data = array();                
-                if (MainWPChildWPRocket::isActivated()){                    
+                if (Main_WP_Child_WP_Rocket::isActivated()){                    
                     $boxes = get_user_meta( $GLOBALS['current_user']->ID, 'rocket_boxes', true );                    
                     $data['rocket_boxes'] = $boxes;                    
                 }         
@@ -2757,12 +2759,12 @@ class MainWPChild
         $last_post = wp_get_recent_posts(array( 'numberposts' => absint('1')));
         if (isset($last_post[0])) $last_post = $last_post[0];
         if (isset($last_post) && isset($last_post['post_modified_gmt'])) $information['last_post_gmt'] = strtotime($last_post['post_modified_gmt']);
-        $information['mainwpdir'] = (MainWPHelper::validateMainWPDir() ? 1 : -1);
+        $information['mainwpdir'] = (Main_WP_Helper::validateMainWPDir() ? 1 : -1);
         $information['uniqueId'] = get_option('mainwp_child_uniqueId', '');
-        $information['plugins_outdate_info'] = MainWPChildPluginsCheck::Instance()->get_plugins_outdate_info();
-        $information['themes_outdate_info'] = MainWPChildThemesCheck::Instance()->get_themes_outdate_info();
+        $information['plugins_outdate_info'] = Main_WP_Child_Plugins_Check::Instance()->get_plugins_outdate_info();
+        $information['themes_outdate_info'] = Main_WP_Child_Themes_Check::Instance()->get_themes_outdate_info();
         
-        if ($exit) MainWPHelper::write($information);
+        if ($exit) Main_WP_Helper::write($information);
 
         return $information;
     }
@@ -2851,8 +2853,8 @@ class MainWPChild
             {
                 $newThemeUpdate = array();
                 $newThemeUpdate['update'] = $themeUpdate->update;
-                $newThemeUpdate['Name'] = MainWPHelper::search($themeUpdate, 'Name');
-                $newThemeUpdate['Version'] = MainWPHelper::search($themeUpdate, 'Version');
+                $newThemeUpdate['Name'] = Main_WP_Helper::search($themeUpdate, 'Name');
+                $newThemeUpdate['Version'] = Main_WP_Helper::search($themeUpdate, 'Version');
                 $newThemeUpdates[$slug] = $newThemeUpdate;
             }
         }
@@ -2961,7 +2963,7 @@ class MainWPChild
     {
         $taxonomy = base64_decode ($_POST['taxonomy']);
         $rslt = get_terms(taxonomy_exists($taxonomy) ? $taxonomy : 'category', 'hide_empty=0');
-        MainWPHelper::write($rslt);
+        Main_WP_Helper::write($rslt);
     }
 
     function set_terms()
@@ -2994,7 +2996,7 @@ class MainWPChild
                 'comment_date' => $comment['date']
             ));
         }
-        MainWPHelper::write($ids);
+        Main_WP_Helper::write($ids);
     }
 
     function get_post_meta()
@@ -3018,7 +3020,7 @@ class MainWPChild
 
 
         $results = $wpdb->get_results(sprintf("SELECT * FROM %s WHERE 1 = 1 $where ", $wpdb->postmeta));
-        MainWPHelper::write($results);
+        Main_WP_Helper::write($results);
     }
 
     function get_total_ezine_post()
@@ -3040,7 +3042,7 @@ class MainWPChild
         $total = $wpdb->get_var("SELECT COUNT(*)
 								 FROM $wpdb->posts p JOIN $wpdb->postmeta pm ON p.ID=pm.post_id
 								 $where  ");
-        MainWPHelper::write($total);
+        Main_WP_Helper::write($total);
     }
 
 	function cancel_scheduled_post() {
@@ -3083,14 +3085,14 @@ class MainWPChild
 				$information['count'] = $count;
 		}
 
-		MainWPHelper::write($information);
+		Main_WP_Helper::write($information);
 	}
 
     function get_next_time_to_post()
     {
       $post_type = $_POST['post_type'];
 	  if ($post_type != 'post' && $post_type != 'page') {
-		MainWPHelper::write(array('error' => 'Data error.'));
+		Main_WP_Helper::write(array('error' => 'Data error.'));
 		return;
 	  }
 	  $information = array();
@@ -3122,12 +3124,12 @@ class MainWPChild
 					$information['next_post_id'] =  $next_post->ID;
 				}
 
-			MainWPHelper::write($information);
+			Main_WP_Helper::write($information);
 		}
 		catch (Exception $e)
 		{
 			$information['error'] = $e->getMessage();
-			MainWPHelper::write($information);
+			Main_WP_Helper::write($information);
 		}
     }
 
@@ -3191,7 +3193,7 @@ class MainWPChild
         $rslt = $this->get_recent_posts(explode(',', $_POST['status']), $maxPages, $type, $extra);
         $this->posts_where_suffix = '';
 
-        MainWPHelper::write($rslt);
+        Main_WP_Helper::write($rslt);
     }
 
     function comments_clauses($clauses)
@@ -3240,7 +3242,7 @@ class MainWPChild
         $rslt = $this->get_recent_comments(explode(',', $_POST['status']), $maxComments);
         $this->comments_and_clauses = '';
 
-        MainWPHelper::write($rslt);
+        Main_WP_Helper::write($rslt);
     }
 
     function get_recent_comments($pAllowedStatuses, $pCount)
@@ -3335,7 +3337,7 @@ class MainWPChild
 
         if (!isset($information['status'])) $information['status'] = 'SUCCESS';
         $information['sync'] = $this->getSiteStats(array(), false);
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function get_all_themes()
@@ -3345,7 +3347,7 @@ class MainWPChild
         $filter = isset($_POST['filter']) ? $_POST['filter'] : true;
         $rslt = $this->get_all_themes_int($filter, $keyword, $status);
 
-        MainWPHelper::write($rslt);
+        Main_WP_Helper::write($rslt);
     }
 
     function get_all_themes_int($filter, $keyword = '', $status = '')
@@ -3452,7 +3454,7 @@ class MainWPChild
 
         if (!isset($information['status'])) $information['status'] = 'SUCCESS';
         $information['sync'] = $this->getSiteStats(array(), false);
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function get_all_plugins()
@@ -3462,7 +3464,7 @@ class MainWPChild
         $filter = isset($_POST['filter']) ? $_POST['filter'] : true;
         $rslt = $this->get_all_plugins_int($filter, $keyword, $status);
 
-        MainWPHelper::write($rslt);
+        Main_WP_Helper::write($rslt);
     }
 
     function get_all_plugins_int($filter, $keyword = '', $status = '')
@@ -3529,7 +3531,7 @@ class MainWPChild
             }
         }
 
-        MainWPHelper::write($allusers);
+        Main_WP_Helper::write($allusers);
     }
 
     function get_all_users_int()
@@ -3602,7 +3604,7 @@ class MainWPChild
             }
         }
 
-        MainWPHelper::write($allusers);
+        Main_WP_Helper::write($allusers);
     }
 
 //Show stats without login - only allowed while no account is added yet
@@ -3610,13 +3612,13 @@ class MainWPChild
     {
         if (get_option('mainwp_child_pubkey'))
         {
-            MainWPHelper::error(__('This site already contains a link - please disable and enable the MainWP plugin.','mainwp-child'));
+            Main_WP_Helper::error(__('This site already contains a link - please disable and enable the MainWP plugin.','mainwp-child'));
         }
 
         global $wp_version;
         $information['version'] = $this->version;
         $information['wpversion'] = $wp_version;
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     //Deactivating the plugin
@@ -3627,10 +3629,10 @@ class MainWPChild
         $information = array();
         if (is_plugin_active($this->plugin_slug))
         {
-            MainWPHelper::error('Plugin still active');
+            Main_WP_Helper::error('Plugin still active');
         }
         $information['deactivated'] = true;
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function activation()
@@ -3644,7 +3646,7 @@ class MainWPChild
                 }
             }
 
-        MainWPHelper::update_option('mainwp_child_activated_once', true);
+        Main_WP_Helper::update_option('mainwp_child_activated_once', true);
         
         // delete bad data if existed
         $to_delete = array('mainwp_ext_snippets_enabled', 'mainwp_ext_code_snippets');                
@@ -3691,14 +3693,14 @@ class MainWPChild
 
         if (empty($wp_filesystem))
         {
-            MainWPHelper::error($this->FTP_ERROR);
+            Main_WP_Helper::error($this->FTP_ERROR);
         }
         else if (is_wp_error($wp_filesystem->errors))
         {
             $errorCodes = $wp_filesystem->errors->get_error_codes();
             if (!empty($errorCodes))
             {
-                MainWPHelper::error(__('Wordpress Filesystem error: ','mainwp-child') . $wp_filesystem->errors->get_error_message());
+                Main_WP_Helper::error(__('Wordpress Filesystem error: ','mainwp-child') . $wp_filesystem->errors->get_error_message());
             }
         }
 
@@ -3709,9 +3711,9 @@ class MainWPChild
     {
         try
         {
-        if (MainWPHelper::function_exists('popen'))
+        if (Main_WP_Helper::function_exists('popen'))
         {
-            $uploadDir = MainWPHelper::getMainWPDir();
+            $uploadDir = Main_WP_Helper::getMainWPDir();
             $uploadDir = $uploadDir[0];
             $popenHandle = @popen('du -s ' . $directory . ' --exclude "' . str_replace(ABSPATH, '', $uploadDir) . '"', 'r');
             if (gettype($popenHandle) == 'resource')
@@ -3725,9 +3727,9 @@ class MainWPChild
                 }
             }
         }
-        if (MainWPHelper::function_exists('shell_exec'))
+        if (Main_WP_Helper::function_exists('shell_exec'))
         {
-            $uploadDir = MainWPHelper::getMainWPDir();
+            $uploadDir = Main_WP_Helper::getMainWPDir();
             $uploadDir = $uploadDir[0];
             $size = @shell_exec('du -s ' . $directory . ' --exclude "' . str_replace(ABSPATH, '', $uploadDir) . '"', 'r');
             if ($size != NULL)
@@ -3765,7 +3767,7 @@ class MainWPChild
             {
                 $path = array_shift($dirs);
                 if (stristr($path, WP_CONTENT_DIR . '/uploads/mainwp')) continue;
-                $uploadDir = MainWPHelper::getMainWPDir();
+                $uploadDir = Main_WP_Helper::getMainWPDir();
                 $uploadDir = $uploadDir[0];
                 if (stristr($path, $uploadDir)) continue;
                 $res = @glob($path . '/*');
@@ -3799,27 +3801,27 @@ class MainWPChild
     function serverInformation()
     {
         @ob_start();
-        MainWPChildServerInformation::render();
+        Main_WP_Child_Server_Information::render();
         $output['information'] = @ob_get_contents();
         @ob_end_clean();
         @ob_start();
-        MainWPChildServerInformation::renderCron();
+        Main_WP_Child_Server_Information::renderCron();
         $output['cron'] = @ob_get_contents();
         @ob_end_clean();
         @ob_start();
-        MainWPChildServerInformation::renderErrorLogPage();
+        Main_WP_Child_Server_Information::renderErrorLogPage();
         $output['error'] = @ob_get_contents();
         @ob_end_clean();
         @ob_start();
-        MainWPChildServerInformation::renderWPConfig();
+        Main_WP_Child_Server_Information::renderWPConfig();
         $output['wpconfig'] = @ob_get_contents();
         @ob_end_clean();
         @ob_start();
-        MainWPChildServerInformation::renderhtaccess();
+        Main_WP_Child_Server_Information::renderhtaccess();
         $output['htaccess'] = @ob_get_contents();
         @ob_end_clean();
 
-        MainWPHelper::write($output);
+        Main_WP_Helper::write($output);
     }
 
     function maintenance_site()
@@ -3831,27 +3833,27 @@ class MainWPChild
 
                 if (isset($_POST['enable_alert']) && $_POST['enable_alert'] == 1)
                 {
-                    MainWPHelper::update_option('mainwp_maintenance_opt_alert_404', 1, 'yes');
+                    Main_WP_Helper::update_option('mainwp_maintenance_opt_alert_404', 1, 'yes');
                 } else {
                     delete_option('mainwp_maintenance_opt_alert_404');
                 }
 
                 if (isset($_POST['email']) && !empty($_POST['email']))
                 {
-                    MainWPHelper::update_option('mainwp_maintenance_opt_alert_404_email', $_POST['email'], 'yes');
+                    Main_WP_Helper::update_option('mainwp_maintenance_opt_alert_404_email', $_POST['email'], 'yes');
                 } else {
                     delete_option('mainwp_maintenance_opt_alert_404_email');
                 }
                 $information['result'] = 'SUCCESS';
-                MainWPHelper::write($information);
+                Main_WP_Helper::write($information);
                 return;
             } else if ($_POST['action'] === 'clear_settings') {
                 delete_option('mainwp_maintenance_opt_alert_404');
                 delete_option('mainwp_maintenance_opt_alert_404_email');
                 $information['result'] = 'SUCCESS';
-                MainWPHelper::write($information);
+                Main_WP_Helper::write($information);
             }
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }
 
         $maint_options = $_POST['options'];
@@ -3867,8 +3869,8 @@ class MainWPChild
             $sql_clean = "DELETE FROM $wpdb->posts WHERE post_type = 'revision'";
             $wpdb->query($sql_clean);
         } else {
-            $results = MainWPHelper::getRevisions($max_revisions);
-            $count_deleted = MainWPHelper::deleteRevisions($results, $max_revisions);
+            $results = Main_WP_Helper::getRevisions($max_revisions);
+            $count_deleted = Main_WP_Helper::deleteRevisions($results, $max_revisions);
         }
         
         if (in_array('autodraft', $maint_options))
@@ -3936,21 +3938,21 @@ class MainWPChild
             $this->maintenance_optimize();
         }        
         if (!isset($information['status'])) $information['status'] = 'SUCCESS';
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     function maintenance_optimize()
     {      
         global $wpdb, $table_prefix;          
         $sql = 'SHOW TABLE STATUS FROM `' . DB_NAME . '`';
-        $result = @MainWPChildDB::_query($sql, $wpdb->dbh);        
-        if (@MainWPChildDB::num_rows($result) && @MainWPChildDB::is_result($result))
+        $result = @Main_WP_Child_DB::_query($sql, $wpdb->dbh);        
+        if (@Main_WP_Child_DB::num_rows($result) && @Main_WP_Child_DB::is_result($result))
         {       
-            while ($row = MainWPChildDB::fetch_array($result))
+            while ($row = Main_WP_Child_DB::fetch_array($result))
             {  
                 if (strpos($row['Name'], $table_prefix) !== false) {                                       
                     $sql = 'OPTIMIZE TABLE ' . $row['Name'];
-                    MainWPChildDB::_query($sql, $wpdb->dbh);
+                    Main_WP_Child_DB::_query($sql, $wpdb->dbh);
                 }
             }
         }
@@ -3977,43 +3979,43 @@ class MainWPChild
         
         // referrer
         if (isset($_SERVER['HTTP_REFERER'])) {
-                $referer = MainWPHelper::clean($_SERVER['HTTP_REFERER']);
+                $referer = Main_WP_Helper::clean($_SERVER['HTTP_REFERER']);
         } else {
                 $referer = "undefined";
         }
         $protocol = isset($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'off') ? 'https://' : 'http://';
         // request URI
         if (isset($_SERVER['REQUEST_URI']) && isset($_SERVER["HTTP_HOST"])) {
-                $request = MainWPHelper::clean($protocol . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+                $request = Main_WP_Helper::clean($protocol . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
         } else {
                 $request = "undefined";
         }
         // query string
         if (isset($_SERVER['QUERY_STRING'])) {
-                $string = MainWPHelper::clean($_SERVER['QUERY_STRING']);
+                $string = Main_WP_Helper::clean($_SERVER['QUERY_STRING']);
         } else {
                 $string = "undefined";
         }
         // IP address
         if (isset($_SERVER['REMOTE_ADDR'])) {
-                $address = MainWPHelper::clean($_SERVER['REMOTE_ADDR']);
+                $address = Main_WP_Helper::clean($_SERVER['REMOTE_ADDR']);
         } else {
                 $address = "undefined";
         }
         // user agent
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                $agent = MainWPHelper::clean($_SERVER['HTTP_USER_AGENT']);
+                $agent = Main_WP_Helper::clean($_SERVER['HTTP_USER_AGENT']);
         } else {
                 $agent = "undefined";
         }
         // identity
         if (isset($_SERVER['REMOTE_IDENT'])) {
-                $remote = MainWPHelper::clean($_SERVER['REMOTE_IDENT']);
+                $remote = Main_WP_Helper::clean($_SERVER['REMOTE_IDENT']);
         } else {
                 $remote = "undefined";
         }
         // log time
-        $time = MainWPHelper::clean(date("F jS Y, h:ia", time()));
+        $time = Main_WP_Helper::clean(date("F jS Y, h:ia", time()));
 
         $mail = "<div>" . "TIME: "            . $time    . "</div>" . 
                 "<div>" . "*404: "            . $request . "</div>" . 
@@ -4025,16 +4027,16 @@ class MainWPChild
                 "<div>" . "USER AGENT: "      . $agent   . "</div>"; 
         $mail = '<div>404 alert</div>
                 <div></div>' . $mail;              
-        wp_mail($email, 'MainWP - 404 Alert: ' . $blog , MainWPHelper::formatEmail($email, $mail), array('From: "'.$from_email.'" <'.$from_email.'>', 'content-type: text/html'));
+        wp_mail($email, 'MainWP - 404 Alert: ' . $blog , Main_WP_Helper::formatEmail($email, $mail), array('From: "'.$from_email.'" <'.$from_email.'>', 'content-type: text/html'));
 
     }
     
     public function keyword_links_action() {
-        MainWPKeywordLinks::Instance()->action();
+        Main_WP_Keyword_Links::Instance()->action();
     }
 	
     public function branding_child_plugin() {		
-        MainWPChildBranding::Instance()->action();
+        Main_WP_Child_Branding::Instance()->action();
     }
     
     public function code_snippet() {    
@@ -4042,7 +4044,7 @@ class MainWPChild
         $information = array('status' => 'FAIL');  
         if ($action === 'run_snippet' || $action === 'save_snippet') {
             if (!isset($_POST['code'])) 
-                 MainWPHelper::write($information);
+                 Main_WP_Helper::write($information);
         }
         $code = stripslashes($_POST['code']);  
         if ($action === 'run_snippet') {            
@@ -4063,11 +4065,11 @@ class MainWPChild
                     $information['status'] = 'SUCCESS';     
             } else {
                 $snippets[$slug] = $code;
-                if (MainWPHelper::update_option('mainwp_ext_code_snippets', $snippets)) {
+                if (Main_WP_Helper::update_option('mainwp_ext_code_snippets', $snippets)) {
                     $information['status'] = 'SUCCESS';  
                 }
             }
-            MainWPHelper::update_option('mainwp_ext_snippets_enabled', true, 'yes');
+            Main_WP_Helper::update_option('mainwp_ext_snippets_enabled', true, 'yes');
         } else if ($action === 'delete_snippet') {
             $type = $_POST['type'];
             $slug = $_POST['slug'];
@@ -4081,7 +4083,7 @@ class MainWPChild
             } else {                
                 if(isset($snippets[$slug])) {                    
                     unset($snippets[$slug]);           
-                    if (MainWPHelper::update_option('mainwp_ext_code_snippets', $snippets)) {
+                    if (Main_WP_Helper::update_option('mainwp_ext_code_snippets', $snippets)) {
                         $information['status'] = 'SUCCESS';  
                     }
                 }
@@ -4089,7 +4091,7 @@ class MainWPChild
                     $information['status'] = 'SUCCESS';             
             }
         }
-        MainWPHelper::write($information); 
+        Main_WP_Helper::write($information); 
     }
     
     public function snippetUpdateWPConfig($action, $slug, $code = "")
@@ -4138,7 +4140,7 @@ class MainWPChild
         $information = array();
         
         if (empty($file_url) || empty($path)) {
-            MainWPHelper::write($information); 
+            Main_WP_Helper::write($information); 
             return;
         }
 
@@ -4159,14 +4161,14 @@ class MainWPChild
         if (!file_exists($dir)) {
             if (FALSE === @mkdir($dir, 0777, true)) {
                 $information['error'] = 'ERRORCREATEDIR';
-                MainWPHelper::write($information); 
+                Main_WP_Helper::write($information); 
                 return;
             }                    
         }
         
         try
         {
-            $upload = MainWPHelper::uploadFile($file_url, $dir, $filename);
+            $upload = Main_WP_Helper::uploadFile($file_url, $dir, $filename);
             if ($upload != null)
             {                    
                 $information['success'] = true;
@@ -4176,23 +4178,23 @@ class MainWPChild
         {
             $information['error'] = $e->getMessage();            
         } 
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }    
     
     function wordpress_seo() {        
-        MainWPWordpressSEO::Instance()->action();                
+        Main_WP_Wordpress_SEO::Instance()->action();                
     }
     
     function client_report() {        
-        MainWPClientReport::Instance()->action();                
+        Main_WP_Client_Report::Instance()->action();                
     }
     
     function page_speed() {        
-        MainWPChildPagespeed::Instance()->action();                
+        Main_WP_Child_Pagespeed::Instance()->action();                
     }
       
     function woo_com_status() {        
-        MainWPChildWooCommerceStatus::Instance()->action();                
+        Main_WP_Child_WooCommerce_Status::Instance()->action();                
     }
     
     function heatmaps() {         
@@ -4205,52 +4207,52 @@ class MainWPChild
                 $need_update = false;  
             } 
             if ($need_update) { 
-                MainWPHelper::update_option('heatMapsIndividualOverrideSetting', $override, 'yes');
-                MainWPHelper::update_option('heatMapsIndividualDisable', $disable, 'yes');
+                Main_WP_Helper::update_option('heatMapsIndividualOverrideSetting', $override, 'yes');
+                Main_WP_Helper::update_option('heatMapsIndividualDisable', $disable, 'yes');
                 $this->update_htaccess(true);
             }
-            MainWPHelper::write(array('result' => 'success'));
+            Main_WP_Helper::write(array('result' => 'success'));
         }             
-        MainWPHelper::write(array('result' => 'fail'));         
+        Main_WP_Helper::write(array('result' => 'fail'));         
     }
     
     function links_checker() {        
-        MainWPChildLinksChecker::Instance()->action();                
+        Main_WP_Child_Links_Checker::Instance()->action();                
     }
     
     function wordfence() {        
-        MainWPChildWordfence::Instance()->action();                
+        Main_WP_Child_Wordfence::Instance()->action();                
     }
 
     function ithemes() {
-        MainWPChildIThemesSecurity::Instance()->action();
+        Main_WP_Child_iThemes_Security::Instance()->action();
     }
 
 
     function updraftplus() {
-        MainWPChildUpdraftplusBackups::Instance()->action();
+        Main_WP_Child_Updraftplus_Backups::Instance()->action();
     }
 
     function backup_wp() {
         if ( !version_compare( phpversion(), '5.3', '>=' ) ) {
             $error = sprintf( __( 'PHP Version %s is unsupported.', 'mainwp-child' ), phpversion());
-            MainWPHelper::write(array('error' => $error));
+            Main_WP_Helper::write(array('error' => $error));
         }
-        MainWPChildBackUpWordPress::Instance()->action();
+        Main_WP_Child_Back_Up_WordPress::Instance()->action();
     }
     
     function wp_rocket() {     
-        MainWPChildWPRocket::Instance()->action();
+        Main_WP_Child_WP_Rocket::Instance()->action();
     }
 
     function backwpup() {
-        MainWPChildBackWPup::Instance()->action();
+        Main_WP_Child_Back_WP_Up::Instance()->action();
     }
     
   
     function delete_backup()
     {
-        $dirs = MainWPHelper::getMainWPDir('backup');
+        $dirs = Main_WP_Helper::getMainWPDir('backup');
         $backupdir = $dirs[0];
 
         $file = $_REQUEST['del'];
@@ -4260,25 +4262,25 @@ class MainWPChild
             @unlink($backupdir . $file);
         }
 
-        MainWPHelper::write(array('result' => 'ok'));
+        Main_WP_Helper::write(array('result' => 'ok'));
     }
     
     function update_values()
     {
         $uniId = isset($_POST['uniqueId']) ? $_POST['uniqueId'] : "";
-        MainWPHelper::update_option('mainwp_child_uniqueId', $uniId);  
-        MainWPHelper::write(array('result' => 'ok'));
+        Main_WP_Helper::update_option('mainwp_child_uniqueId', $uniId);  
+        Main_WP_Helper::write(array('result' => 'ok'));
     }    
     
     function uploadFile($file, $offset = 0)
     {
-        $dirs = MainWPHelper::getMainWPDir('backup');
+        $dirs = Main_WP_Helper::getMainWPDir('backup');
         $backupdir = $dirs[0];
 
         header('Content-Description: File Transfer');
 
         header('Content-Description: File Transfer');
-        if (MainWPHelper::endsWith($file, '.tar.gz'))
+        if (Main_WP_Helper::endsWith($file, '.tar.gz'))
         {
             header('Content-Type: application/x-gzip');
             header("Content-Encoding: gzip'");
@@ -4320,7 +4322,7 @@ class MainWPChild
             switch ($_POST['action']) {
                 case 'force_destroy_sessions';
                     if (get_current_user_id() == 0) {
-                        MainWPHelper::write(array('error' => __( 'Cannot get user_id', 'mainwp-child' ) ) );
+                        Main_WP_Helper::write(array('error' => __( 'Cannot get user_id', 'mainwp-child' ) ) );
                     }
 
                     wp_destroy_all_sessions();
@@ -4328,17 +4330,17 @@ class MainWPChild
                     $sessions = wp_get_all_sessions();
 
                     if (empty($sessions)) {
-                        MainWPHelper::write(array('success' => 1));   
+                        Main_WP_Helper::write(array('success' => 1));   
                     } else {
-                        MainWPHelper::write(array('error' => __( 'Cannot destroy sessions', 'mainwp-child' ) ) );
+                        Main_WP_Helper::write(array('error' => __( 'Cannot destroy sessions', 'mainwp-child' ) ) );
                     }
                 break;
                 
                 default:
-                    MainWPHelper::write(array('error' => __( 'Invalid action', 'mainwp-child' ) ) );
+                    Main_WP_Helper::write(array('error' => __( 'Invalid action', 'mainwp-child' ) ) );
             }
         } else {
-            MainWPHelper::write(array('error' => __( 'Missing action', 'mainwp-child' ) ) );
+            Main_WP_Helper::write(array('error' => __( 'Missing action', 'mainwp-child' ) ) );
         }
     }
     

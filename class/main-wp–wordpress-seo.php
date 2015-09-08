@@ -1,14 +1,14 @@
 <?php
 
-class MainWPWordpressSEO
+class Main_WP_Wordpress_SEO
 {   
     public static $instance = null;
     
     static function Instance() {
-        if (MainWPWordpressSEO::$instance == null) {
-            MainWPWordpressSEO::$instance = new MainWPWordpressSEO();
+        if (Main_WP_Wordpress_SEO::$instance == null) {
+            Main_WP_Wordpress_SEO::$instance = new Main_WP_Wordpress_SEO();
         }
-        return MainWPWordpressSEO::$instance;
+        return Main_WP_Wordpress_SEO::$instance;
     }    
     
     public function __construct() {
@@ -28,7 +28,7 @@ class MainWPWordpressSEO
     public function action() {        
         if (!class_exists('WPSEO_Admin')) {
             $information['error'] = 'NO_WPSEO';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }
         $result = array();
         switch ($_POST['action']) {
@@ -36,7 +36,7 @@ class MainWPWordpressSEO
                 $information = $this->import_settings();
             break;                
         }        
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }  
     
     public function import_settings() {
@@ -68,7 +68,7 @@ class MainWPWordpressSEO
         {
             unlink($temporary_file);
         }            
-        MainWPHelper::write($information);        
+        Main_WP_Helper::write($information);        
     }
     
     public function import_seo_settings($file) {

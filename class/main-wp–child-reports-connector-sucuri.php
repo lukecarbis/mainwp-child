@@ -1,6 +1,6 @@
 <?php
 if (class_exists('MainWP_WP_Stream_Connector')) {
-    class MainWPChildReportsConnectorSucuri extends MainWP_WP_Stream_Connector   
+    class Main_WP_Child_Reports_Connector_Sucuri extends MainWP_WP_Stream_Connector   
     {   
 
 	/**

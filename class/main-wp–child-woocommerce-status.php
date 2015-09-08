@@ -1,14 +1,14 @@
 <?php
 
-class MainWPChildWooCommerceStatus      
+class Main_WP_Child_WooCommerce_Status      
 {   
     public static $instance = null;   
     
     static function Instance() {
-        if (MainWPChildWooCommerceStatus::$instance == null) {
-            MainWPChildWooCommerceStatus::$instance = new MainWPChildWooCommerceStatus();
+        if (Main_WP_Child_WooCommerce_Status::$instance == null) {
+            Main_WP_Child_WooCommerce_Status::$instance = new Main_WP_Child_WooCommerce_Status();
         }
-        return MainWPChildWooCommerceStatus::$instance;
+        return Main_WP_Child_WooCommerce_Status::$instance;
     }  
     
     public function __construct() {
@@ -25,7 +25,7 @@ class MainWPChildWooCommerceStatus
         $information = array();
         if (!class_exists('WooCommerce')) {
             $information['error'] = 'NO_WOOCOMMERCE';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }  
 
         $is_ver220 = $this->is_version_220();
@@ -39,7 +39,7 @@ class MainWPChildWooCommerceStatus
                     break;                
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }  
        
     function is_version_220() {

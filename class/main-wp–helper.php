@@ -1,6 +1,5 @@
 <?php
-class MainWPHelper
-{
+class Main_WP_Helper {
 
     static function write($val)
     {
@@ -11,7 +10,7 @@ class MainWPHelper
     static function error($error)
     {
         $information['error'] = $error;
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
 
     static function uploadImage($img_url)
@@ -90,7 +89,7 @@ class MainWPHelper
         global $current_user;        
         $wprocket_fields = array( 'lazyload', 'lazyload_iframes', 'minify_html', 'minify_css', 'minify_js', 'cdn' );     
         $wprocket_activated = false;
-        if (MainWPChildWPRocket::isActivated()) {
+        if (Main_WP_Child_WP_Rocket::isActivated()) {
             if (function_exists('get_rocket_option')) {
                 $wprocket_activated = true;
                 foreach ( $wprocket_fields as $field ) {
@@ -187,7 +186,7 @@ class MainWPHelper
 
                 try
                 {
-                $downloadfile = MainWPHelper::uploadImage($originalImgUrl);
+                $downloadfile = Main_WP_Helper::uploadImage($originalImgUrl);
                 $localUrl = $downloadfile['url'];
                 $linkToReplaceWith = dirname($localUrl);
                 if ($hrefLink != '')
@@ -346,7 +345,7 @@ class MainWPHelper
             if (!empty($_seo_opengraph_image) && strpos($_seo_opengraph_image, $_server_domain) !== false) {                 
                 try
                 {
-                    $upload = MainWPHelper::uploadImage($_seo_opengraph_image); //Upload image to WP
+                    $upload = Main_WP_Helper::uploadImage($_seo_opengraph_image); //Upload image to WP
                     if ($upload != null)
                     {
                         update_post_meta($new_post_id, WPSEO_Meta::$meta_prefix . 'opengraph-image', $upload['url']); //Add the image to the post!
@@ -386,7 +385,7 @@ class MainWPHelper
         {
             try
             {
-                $upload = MainWPHelper::uploadImage($post_featured_image); //Upload image to WP
+                $upload = Main_WP_Helper::uploadImage($post_featured_image); //Upload image to WP
 
                 if ($upload != null)
                 {
@@ -443,7 +442,7 @@ class MainWPHelper
         // MainWP Robot
         if ($is_robot_post) {
             $all_comments = $post_custom['_mainwp_robot_post_comments'];            
-            MainWPChildRobot::Instance()->wpr_insertcomments($new_post_id, $all_comments);           
+            Main_WP_Child_Robot::Instance()->wpr_insertcomments($new_post_id, $all_comments);           
         }
         
         $ret['success'] = true;
@@ -487,7 +486,7 @@ class MainWPHelper
 
     static function checkDir($dir, $dieOnError)
     {
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
         global $wp_filesystem;
         if (!file_exists($dir))
         {
@@ -524,14 +523,14 @@ class MainWPHelper
     public static function validateMainWPDir()
     {
         $done = false;
-        $dir = MainWPHelper::getMainWPDir();
+        $dir = Main_WP_Helper::getMainWPDir();
         $dir = $dir[0];
-        if (MainWPHelper::getWPFilesystem())
+        if (Main_WP_Helper::getWPFilesystem())
         {
             global $wp_filesystem;
             try
             {
-                MainWPHelper::checkDir($dir, false);
+                Main_WP_Helper::checkDir($dir, false);
             }
             catch (Exception $e)
             {
@@ -953,9 +952,9 @@ class MainWPHelper
         {
             foreach ($excludes as $exclude)
             {
-                if (MainWPHelper::endsWith($exclude, '*'))
+                if (Main_WP_Helper::endsWith($exclude, '*'))
                 {
-                    if (MainWPHelper::startsWith($value, substr($exclude, 0, strlen($exclude) - 1)))
+                    if (Main_WP_Helper::startsWith($value, substr($exclude, 0, strlen($exclude) - 1)))
                     {
                         return true;
                     }
@@ -964,7 +963,7 @@ class MainWPHelper
                 {
                     return true;
                 }
-                else if (MainWPHelper::startsWith($value, $exclude . '/'))
+                else if (Main_WP_Helper::startsWith($value, $exclude . '/'))
                 {
                     return true;
                 }

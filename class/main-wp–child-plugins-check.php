@@ -8,7 +8,7 @@ License: GPLv2
 Author: Vendi Advertising (Chris Haas)
 */
 
-class MainWPChildPluginsCheck
+class Main_WP_Child_Plugins_Check
 {   
  
     public static $instance = null;  
@@ -26,10 +26,10 @@ class MainWPChildPluginsCheck
     private $option_name_last_daily_run = 'mainwp_child_plugin_last_daily_run';
     
     public static function Instance() {        
-        if (MainWPChildPluginsCheck::$instance === null) {
-            MainWPChildPluginsCheck::$instance = new MainWPChildPluginsCheck();
+        if (Main_WP_Child_Plugins_Check::$instance === null) {
+            Main_WP_Child_Plugins_Check::$instance = new Main_WP_Child_Plugins_Check();
         }
-        return MainWPChildPluginsCheck::$instance;
+        return Main_WP_Child_Plugins_Check::$instance;
     }      
 
     public function __construct()

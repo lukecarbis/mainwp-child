@@ -1,24 +1,24 @@
 <?php
 
-class MainWPSecurity
+class Main_WP_Security
 {
     public static function fixAll()
     {
-        MainWPSecurity::remove_wp_version();
-        MainWPSecurity::remove_rsd();
-        MainWPSecurity::remove_wlw();
-//        MainWPSecurity::remove_core_update();
-//        MainWPSecurity::remove_plugin_update();
-//        MainWPSecurity::remove_theme_update();
-        MainWPSecurity::remove_php_reporting();
-        MainWPSecurity::remove_scripts_version();
-        MainWPSecurity::remove_styles_version();
-        MainWPSecurity::remove_readme();
+        Main_WP_Security::remove_wp_version();
+        Main_WP_Security::remove_rsd();
+        Main_WP_Security::remove_wlw();
+//        Main_WP_Security::remove_core_update();
+//        Main_WP_Security::remove_plugin_update();
+//        Main_WP_Security::remove_theme_update();
+        Main_WP_Security::remove_php_reporting();
+        Main_WP_Security::remove_scripts_version();
+        Main_WP_Security::remove_styles_version();
+        Main_WP_Security::remove_readme();
 
-        add_filter('style_loader_src', array('MainWPSecurity', 'remove_script_versions'), 999 );
-        add_filter('style_loader_src', array('MainWPSecurity', 'remove_theme_versions'), 999 );
-        add_filter('script_loader_src', array('MainWPSecurity', 'remove_script_versions'), 999 );
-        add_filter('script_loader_src', array('MainWPSecurity', 'remove_theme_versions'), 999 );
+        add_filter('style_loader_src', array('Main_WP_Security', 'remove_script_versions'), 999 );
+        add_filter('style_loader_src', array('Main_WP_Security', 'remove_theme_versions'), 999 );
+        add_filter('script_loader_src', array('Main_WP_Security', 'remove_script_versions'), 999 );
+        add_filter('script_loader_src', array('Main_WP_Security', 'remove_theme_versions'), 999 );
     }
 
     //Prevent listing wp-content, wp-content/plugins, wp-content/themes, wp-content/uploads
@@ -26,17 +26,17 @@ class MainWPSecurity
 
     private static function init_listingDirectories()
     {
-        if (MainWPSecurity::$listingDirectories == null)
+        if (Main_WP_Security::$listingDirectories == null)
         {
             $wp_upload_dir = wp_upload_dir();
-            MainWPSecurity::$listingDirectories = array(WP_CONTENT_DIR, WP_PLUGIN_DIR, get_theme_root(), $wp_upload_dir['basedir']);
+            Main_WP_Security::$listingDirectories = array(WP_CONTENT_DIR, WP_PLUGIN_DIR, get_theme_root(), $wp_upload_dir['basedir']);
         }
     }
 
     public static function prevent_listing_ok()
     {
-        MainWPSecurity::init_listingDirectories();
-        foreach (MainWPSecurity::$listingDirectories as $directory)
+        Main_WP_Security::init_listingDirectories();
+        foreach (Main_WP_Security::$listingDirectories as $directory)
         {
             $file = $directory . DIRECTORY_SEPARATOR . 'index.php';
             if (!file_exists($file))
@@ -49,8 +49,8 @@ class MainWPSecurity
 
     public static function prevent_listing()
     {
-        MainWPSecurity::init_listingDirectories();
-        foreach (MainWPSecurity::$listingDirectories as $directory)
+        Main_WP_Security::init_listingDirectories();
+        foreach (Main_WP_Security::$listingDirectories as $directory)
         {
             $file = $directory . DIRECTORY_SEPARATOR . 'index.php';
             if (!file_exists($file))
@@ -191,9 +191,9 @@ class MainWPSecurity
 
     private static function init_permission_checks()
     {
-        if (MainWPSecurity::$permission_checks == null)
+        if (Main_WP_Security::$permission_checks == null)
         {
-            MainWPSecurity::$permission_checks = array(WP_CONTENT_DIR . DIRECTORY_SEPARATOR . '../' => '0755',
+            Main_WP_Security::$permission_checks = array(WP_CONTENT_DIR . DIRECTORY_SEPARATOR . '../' => '0755',
                                                         WP_CONTENT_DIR . DIRECTORY_SEPARATOR . '../wp-includes' => '0755',
                                                         WP_CONTENT_DIR . DIRECTORY_SEPARATOR . '../.htaccess' => '0644',
                                                         WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'index.php' => '0644',
@@ -207,11 +207,11 @@ class MainWPSecurity
 
 //    public static function fix_file_permissions_ok()
 //    {
-//        MainWPSecurity::init_permission_checks();
+//        Main_WP_Security::init_permission_checks();
 //
 //        $perms_issues = 0;
 //
-//        foreach (MainWPSecurity::$permission_checks as $dir => $needed_perms)
+//        foreach (Main_WP_Security::$permission_checks as $dir => $needed_perms)
 //        {
 //            if (!file_exists($dir)) continue;
 //
@@ -226,9 +226,9 @@ class MainWPSecurity
 
 //    public static function fix_file_permissions()
 //    {
-//        MainWPSecurity::init_permission_checks();
+//        Main_WP_Security::init_permission_checks();
 //        $success = true;
-//        foreach (MainWPSecurity::$permission_checks as $dir => $needed_perms)
+//        foreach (Main_WP_Security::$permission_checks as $dir => $needed_perms)
 //        {
 //            if (!file_exists($dir)) continue;
 //            $success == $success && chmod($dir, $needed_perms);
@@ -332,7 +332,7 @@ class MainWPSecurity
             {
                 if (!@unlink(ABSPATH . 'readme.html'))
                 {
-                    MainWPHelper::getWPFilesystem();
+                    Main_WP_Helper::getWPFilesystem();
                     global $wp_filesystem;
                     if (!empty($wp_filesystem)) $wp_filesystem->delete(ABSPATH . 'readme.html');
                 }

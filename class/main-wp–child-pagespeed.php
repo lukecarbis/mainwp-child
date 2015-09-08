@@ -1,15 +1,15 @@
 <?php
 
-class MainWPChildPagespeed
+class Main_WP_Child_Pagespeed
 {   
     
     public static $instance = null;   
     
     static function Instance() {
-        if (MainWPChildPagespeed::$instance == null) {
-            MainWPChildPagespeed::$instance = new MainWPChildPagespeed();
+        if (Main_WP_Child_Pagespeed::$instance == null) {
+            Main_WP_Child_Pagespeed::$instance = new Main_WP_Child_Pagespeed();
         }
-        return MainWPChildPagespeed::$instance;
+        return Main_WP_Child_Pagespeed::$instance;
     }  
     
     public function __construct() {
@@ -20,7 +20,7 @@ class MainWPChildPagespeed
         $information = array();
         if (!defined('GPI_ACTIVE')) {
             $information['error'] = 'NO_GOOGLEPAGESPEED';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }   
         if (isset($_POST['mwp_action'])) {
             switch ($_POST['mwp_action']) {                
@@ -35,7 +35,7 @@ class MainWPChildPagespeed
                     break;
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }  
    
     public function child_deactivation()
@@ -60,7 +60,7 @@ class MainWPChildPagespeed
     }        
     
     public function init_cron() {        
-        add_action('mainwp_child_pagespeed_cron_check', array('MainWPChildPagespeed', 'pagespeed_cron_check'));            
+        add_action('mainwp_child_pagespeed_cron_check', array('Main_WP_Child_Pagespeed', 'pagespeed_cron_check'));            
         if (($sched = wp_next_scheduled('mainwp_child_pagespeed_cron_check')) == false)
         {            
             wp_schedule_event(time(), 'daily', 'mainwp_child_pagespeed_cron_check');                            
@@ -119,15 +119,15 @@ class MainWPChildPagespeed
     
     
      function set_showhide() {
-        MainWPHelper::update_option('mainwp_pagespeed_ext_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_pagespeed_ext_enabled', "Y", 'yes');
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_pagespeed_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_pagespeed_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }
     
     function save_settings() {
-        MainWPHelper::update_option('mainwp_pagespeed_ext_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_pagespeed_ext_enabled', "Y", 'yes');
         $current_values = get_option('gpagespeedi_options');
         if (is_array($current_values) && $current_values['last_run_finished'] == false)
             return array('result' => 'RUNNING');

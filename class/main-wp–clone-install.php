@@ -1,9 +1,9 @@
 <?php
-class MainWPCloneInstall
+class Main_WP_Clone_Install
 {
     protected $file;
     public $config;
-    /** @var $archiver TarArchiver */
+    /** @var $archiver Tar_Archiver */
     protected $archiver;
 
     /**
@@ -22,15 +22,15 @@ class MainWPCloneInstall
         }
         else if (substr($this->file, -7) == '.tar.gz')
         {
-            $this->archiver = new TarArchiver(null, 'tar.gz');
+            $this->archiver = new Tar_Archiver(null, 'tar.gz');
         }
         else if (substr($this->file, -8) == '.tar.bz2')
         {
-            $this->archiver = new TarArchiver(null, 'tar.bz2');
+            $this->archiver = new Tar_Archiver(null, 'tar.bz2');
         }
         else if (substr($this->file, -4) == '.tar')
         {
-            $this->archiver = new TarArchiver(null, 'tar');
+            $this->archiver = new Tar_Archiver(null, 'tar');
         }
     }
 
@@ -154,8 +154,8 @@ class MainWPCloneInstall
         if ($configContents === FALSE) throw new Exception(__('Cant read configuration file from backup', 'mainwp-child'));
         $this->config = unserialize(base64_decode($configContents));
 
-        if (isset($this->config['plugins'])) MainWPHelper::update_option('mainwp_temp_clone_plugins', $this->config['plugins']);
-        if (isset($this->config['themes'])) MainWPHelper::update_option('mainwp_temp_clone_themes', $this->config['themes']);
+        if (isset($this->config['plugins'])) Main_WP_Helper::update_option('mainwp_temp_clone_plugins', $this->config['plugins']);
+        if (isset($this->config['themes'])) Main_WP_Helper::update_option('mainwp_temp_clone_themes', $this->config['themes']);
     }
 
     public function setConfig($key, $val)
@@ -165,10 +165,10 @@ class MainWPCloneInstall
 
     public function testDatabase()
     {
-        $link = @MainWPChildDB::connect($this->config['dbHost'], $this->config['dbUser'], $this->config['dbPass']);
+        $link = @Main_WP_Child_DB::connect($this->config['dbHost'], $this->config['dbUser'], $this->config['dbPass']);
         if (!$link) throw new Exception(__('Invalid database host or user/password.', 'mainwp-child'));
 
-        $db_selected = @MainWPChildDB::select_db($this->config['dbName'], $link);
+        $db_selected = @Main_WP_Child_DB::select_db($this->config['dbName'], $link);
         if (!$db_selected) throw new Exception(__('Invalid database name', 'mainwp-child'));
     }
 
@@ -176,17 +176,17 @@ class MainWPCloneInstall
     {
         if (file_exists(WP_CONTENT_DIR . '/dbBackup.sql')) @unlink(WP_CONTENT_DIR . '/dbBackup.sql');
         if (file_exists(ABSPATH . 'clone/config.txt')) @unlink(ABSPATH . 'clone/config.txt');
-        if (MainWPHelper::is_dir_empty(ABSPATH . 'clone')) @rmdir(ABSPATH . 'clone');
+        if (Main_WP_Helper::is_dir_empty(ABSPATH . 'clone')) @rmdir(ABSPATH . 'clone');
 
         try
         {
-            $dirs = MainWPHelper::getMainWPDir('backup', false);
+            $dirs = Main_WP_Helper::getMainWPDir('backup', false);
             $backupdir = $dirs[0];
 
             $files = glob($backupdir . '*');
             foreach ($files as $file)
             {
-                if (MainWPHelper::isArchive($file))
+                if (Main_WP_Helper::isArchive($file))
                 {
                     @unlink($file);
                 }
@@ -217,11 +217,11 @@ class MainWPCloneInstall
         $var = $wpdb->get_var('SELECT option_value FROM ' . $this->config['prefix'] . 'options WHERE option_name = "' . $name . '"');
         if ($var == NULL)
         {
-            $wpdb->query('INSERT INTO ' . $this->config['prefix'] . 'options (`option_name`, `option_value`) VALUES ("' . $name . '", "' . MainWPChildDB::real_escape_string(maybe_serialize($value)) . '")');
+            $wpdb->query('INSERT INTO ' . $this->config['prefix'] . 'options (`option_name`, `option_value`) VALUES ("' . $name . '", "' . Main_WP_Child_DB::real_escape_string(maybe_serialize($value)) . '")');
         }
         else
         {
-            $wpdb->query('UPDATE ' . $this->config['prefix'] . 'options SET option_value = "' . MainWPChildDB::real_escape_string(maybe_serialize($value)) . '" WHERE option_name = "' . $name . '"');
+            $wpdb->query('UPDATE ' . $this->config['prefix'] . 'options SET option_value = "' . Main_WP_Child_DB::real_escape_string(maybe_serialize($value)) . '" WHERE option_name = "' . $name . '"');
         }
     }
 
@@ -345,7 +345,7 @@ class MainWPCloneInstall
 //
 //            $option_val = $this->recalculateSerializedLengths($option_val);
 //            $option_id = $row['option_id'];
-//            $wpdb->query('UPDATE '.$table_prefix.'options SET option_value = "'.MainWPChildDB::real_escape_string($option_val).'" WHERE option_id = '.$option_id);
+//            $wpdb->query('UPDATE '.$table_prefix.'options SET option_value = "'.Main_WP_Child_DB::real_escape_string($option_val).'" WHERE option_id = '.$option_id);
 //        }
         $wpdb->query('SET foreign_key_checks = 1');
         return true;
@@ -434,7 +434,7 @@ class MainWPCloneInstall
 
             $option_val = $this->recalculateSerializedLengths($option_val);
             $option_id = $row['option_id'];
-            $wpdb->query('UPDATE ' . $table_prefix . 'options SET option_value = "' . MainWPChildDB::real_escape_string($option_val) . '" WHERE option_id = ' . $option_id);
+            $wpdb->query('UPDATE ' . $table_prefix . 'options SET option_value = "' . Main_WP_Child_DB::real_escape_string($option_val) . '" WHERE option_id = ' . $option_id);
         }
         $wpdb->query('SET foreign_key_checks = 1');
         return true;
@@ -599,7 +599,7 @@ class MainWPCloneInstall
 
     public function extractWPZipBackup()
     {
-        MainWPHelper::getWPFilesystem();
+        Main_WP_Helper::getWPFilesystem();
         global $wp_filesystem;
 
         //First check if there is a database backup in the zip file, these can be very large and the wordpress unzip_file can not handle these!
@@ -742,13 +742,13 @@ class MainWPCloneInstall
                 $columns = array();
 
                 // Get a list of columns in this table
-                $fields = MainWPChildDB::_query('DESCRIBE ' . $table, $connection);
-                while ($column = MainWPChildDB::fetch_array($fields))
+                $fields = Main_WP_Child_DB::_query('DESCRIBE ' . $table, $connection);
+                while ($column = Main_WP_Child_DB::fetch_array($fields))
                     $columns[$column['Field']] = $column['Key'] == 'PRI' ? true : false;
 
                 // Count the number of rows we have in the table if large we'll split into blocks, This is a mod from Simon Wheatley
-                $row_count = MainWPChildDB::_query('SELECT COUNT(*) as count FROM ' . $table, $connection); // to fix bug
-                $rows_result = MainWPChildDB::fetch_array($row_count);
+                $row_count = Main_WP_Child_DB::_query('SELECT COUNT(*) as count FROM ' . $table, $connection); // to fix bug
+                $rows_result = Main_WP_Child_DB::fetch_array($row_count);
                 $row_count = $rows_result['count'];
                 if ($row_count == 0)
                     continue;
@@ -761,11 +761,11 @@ class MainWPCloneInstall
                     $start = $page * $page_size;
                     $end = $start + $page_size;
                     // Grab the content of the table
-                    $data = MainWPChildDB::_query(sprintf('SELECT * FROM %s LIMIT %d, %d', $table, $start, $end), $connection);
+                    $data = Main_WP_Child_DB::_query(sprintf('SELECT * FROM %s LIMIT %d, %d', $table, $start, $end), $connection);
                     if (!$data)
-                        $report['errors'][] = MainWPChildDB::error();
+                        $report['errors'][] = Main_WP_Child_DB::error();
 
-                    while ($row = MainWPChildDB::fetch_array($data))
+                    while ($row = Main_WP_Child_DB::fetch_array($data))
                     {
 
                         $report['rows']++; // Increment the row counter
@@ -787,20 +787,20 @@ class MainWPCloneInstall
                             if ($edited_data != $data_to_fix)
                             {
                                 $report['change']++;
-                                $update_sql[] = $column . ' = "' . MainWPChildDB::real_escape_string($edited_data) . '"';
+                                $update_sql[] = $column . ' = "' . Main_WP_Child_DB::real_escape_string($edited_data) . '"';
                                 $upd = true;
                             }
 
                             if ($primary_key)
-                                $where_sql[] = $column . ' = "' . MainWPChildDB::real_escape_string($data_to_fix) . '"';
+                                $where_sql[] = $column . ' = "' . Main_WP_Child_DB::real_escape_string($data_to_fix) . '"';
                         }
 
                         if ($upd && !empty($where_sql))
                         {
                             $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $update_sql) . ' WHERE ' . implode(' AND ', array_filter($where_sql));
-                            $result = MainWPChildDB::_query($sql, $connection);
+                            $result = Main_WP_Child_DB::_query($sql, $connection);
                             if (!$result)
-                                $report['errors'][] = MainWPChildDB::error();
+                                $report['errors'][] = Main_WP_Child_DB::error();
                             else
                                 $report['updates']++;
 

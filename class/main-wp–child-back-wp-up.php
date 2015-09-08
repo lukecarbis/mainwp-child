@@ -4,7 +4,7 @@ if ( ! defined( 'MAINWP_BACKWPUP_DEVELOPMENT' ) ) {
 	define( 'MAINWP_BACKWPUP_DEVELOPMENT', false );
 }
 
-class MainWPChildBackWPup {
+class Main_WP_Child_Back_WP_Up {
 	public $is_backwpup_installed = false;
 	public $is_backwpup_pro = false;
 	public $plugin_translate = "mainwp-backwpup-extension";
@@ -42,11 +42,11 @@ class MainWPChildBackWPup {
 	);
 
 	static function Instance() {
-		if ( MainWPChildBackWPup::$instance == null ) {
-			MainWPChildBackWPup::$instance = new MainWPChildBackWPup();
+		if ( Main_WP_Child_Back_WP_Up::$instance == null ) {
+			Main_WP_Child_Back_WP_Up::$instance = new Main_WP_Child_Back_WP_Up();
 		}
 
-		return MainWPChildBackWPup::$instance;
+		return Main_WP_Child_Back_WP_Up::$instance;
 	}
 
 	public function __construct() {
@@ -71,7 +71,7 @@ class MainWPChildBackWPup {
 
 	public function action() {
 		if ( ! $this->is_backwpup_installed ) {
-			MainWPHelper::write( array( 'error' => __( 'Please install BackWPup plugin on child website', $this->plugin_translate ) ) );
+			Main_WP_Helper::write( array( 'error' => __( 'Please install BackWPup plugin on child website', $this->plugin_translate ) ) );
 
 			return;
 		}
@@ -80,9 +80,9 @@ class MainWPChildBackWPup {
 		function mainwp_backwpup_handle_fatal_error() {
 			$error = error_get_last();
 			if (isset($error['type']) && $error['type'] == E_ERROR && isset($error['message'])) {
-				die( '<mainwp>' . base64_encode( serialize( array( 'error' => 'MainWPChild fatal error : ' . $error['message'] . ' Line: ' . $error['line'] . ' File: ' . $error['file'] ) ) ) . '</mainwp>' );
-			} else if (!empty(MainWPChildBackWPup::$information)) {
-				die( '<mainwp>' . base64_encode( serialize( MainWPChildBackWPup::$information ) ) . '</mainwp>' );
+				die( '<mainwp>' . base64_encode( serialize( array( 'error' => 'Main_WP_Child fatal error : ' . $error['message'] . ' Line: ' . $error['line'] . ' File: ' . $error['file'] ) ) ) . '</mainwp>' );
+			} else if (!empty(Main_WP_Child_Back_WP_Up::$information)) {
+				die( '<mainwp>' . base64_encode( serialize( Main_WP_Child_Back_WP_Up::$information ) ) . '</mainwp>' );
 			} else {
 				die( '<mainwp>' . base64_encode( array('error' => 'Missing information array inside fatal_error') ) . '</mainwp>' );
 			}
@@ -173,7 +173,7 @@ class MainWPChildBackWPup {
 			}
 		}
 
-		MainWPChildBackWPup::$information = $information;
+		Main_WP_Child_Back_WP_Up::$information = $information;
 		exit();
 	}
 
@@ -216,11 +216,11 @@ class MainWPChildBackWPup {
 	}
 
 	protected function show_hide() {
-		MainWPHelper::update_option( 'mainwp_backwpup_ext_enabled', "Y" );
+		Main_WP_Helper::update_option( 'mainwp_backwpup_ext_enabled', "Y" );
 
 		$hide = isset( $_POST['show_hide'] ) && ( $_POST['show_hide'] == "1" ) ? 'hide' : "";
 
-		MainWPHelper::update_option( 'mainwp_backwpup_hide_plugin', $hide );
+		Main_WP_Helper::update_option( 'mainwp_backwpup_hide_plugin', $hide );
 
 		return array( 'success' => 1 );
 	}

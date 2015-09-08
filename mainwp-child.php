@@ -21,7 +21,11 @@ include_once( ABSPATH . 'wp-includes' . DIRECTORY_SEPARATOR . 'version.php' ); /
 $classDir = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . str_replace( basename( __FILE__ ), '', plugin_basename( __FILE__ ) ) . 'class' . DIRECTORY_SEPARATOR;
 
 function mainwp_child_autoload( $class_name ) {
-	$class_file = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . str_replace( basename( __FILE__ ), '', plugin_basename( __FILE__ ) ) . 'class' . DIRECTORY_SEPARATOR . $class_name . '.class.php';
+	$class = strtolower( str_replace( '_', '-', $class_name ) );
+
+	// @TODO: Simplify with plugin_dir_path( __FILE__ ) and trailingslashit()
+	$class_file = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . str_replace( basename( __FILE__ ), '', plugin_basename( __FILE__ ) ) . 'class' . DIRECTORY_SEPARATOR . $class . '.php';
+
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
 	}
@@ -35,8 +39,8 @@ if ( function_exists( 'spl_autoload_register' ) ) {
 	}
 }
 
-// @TODO: Couldn't this simply be MainWPChild( __FILE__ )?
-$main_wp_child = new MainWPChild( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . plugin_basename( __FILE__ ) );
+// @TODO: Couldn't this simply be Main_WP_Child( __FILE__ )?
+$main_wp_child = new Main_WP_Child( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . plugin_basename( __FILE__ ) );
 
 // Back compatibility
 $mainWPChild = $main_wp_child;

@@ -1,10 +1,10 @@
 <?php
 
-class MainWPChildServerInformation
+class Main_WP_Child_Server_Information
 {
     public static function init()
     {
-        add_action('wp_ajax_mainwp-child_dismiss_warnings', array('MainWPChildServerInformation', 'dismissWarnings'));
+        add_action('wp_ajax_mainwp-child_dismiss_warnings', array('Main_WP_Child_Server_Information', 'dismissWarnings'));
     }
 
     public static function dismissWarnings()
@@ -23,13 +23,13 @@ class MainWPChildServerInformation
                 $dismissWarnings['warnings'] = self::getWarnings();
             }
 
-            MainWPHelper::update_option('mainwp_child_dismiss_warnings', $dismissWarnings);
+            Main_WP_Helper::update_option('mainwp_child_dismiss_warnings', $dismissWarnings);
         }
     }
 
     public static function showWarnings()
     {
-        if (stristr($_SERVER["REQUEST_URI"], 'MainWPChildServerInformation')) return;
+        if (stristr($_SERVER["REQUEST_URI"], 'Main_WP_Child_Server_Information')) return;
 
         $conflicts = self::getConflicts();
         $warnings = self::getWarnings();
@@ -38,7 +38,7 @@ class MainWPChildServerInformation
         if (!is_array($dismissWarnings)) $dismissWarnings = array();
 
         if (isset($dismissWarnings['warnings']) && $dismissWarnings['warnings'] >= $warnings) $warnings = 0;
-        if (isset($dismissWarnings['conflicts']) && MainWPHelper::containsAll($dismissWarnings['conflicts'], $conflicts)) $conflicts = array();
+        if (isset($dismissWarnings['conflicts']) && Main_WP_Helper::containsAll($dismissWarnings['conflicts'], $conflicts)) $conflicts = array();
 
         if ($warnings == 0 && count($conflicts) == 0) return;
 
@@ -51,7 +51,7 @@ class MainWPChildServerInformation
         {
             $dismissWarnings['conflicts'] = array();
         }
-        MainWPHelper::update_option('mainwp_child_dismiss_warnings', $dismissWarnings);
+        Main_WP_Helper::update_option('mainwp_child_dismiss_warnings', $dismissWarnings);
 
         $itheme_ext_activated = (get_option('mainwp_ithemes_ext_activated') == 'Y') ? true : false;
         if ($itheme_ext_activated) {
@@ -126,7 +126,7 @@ class MainWPChildServerInformation
 
             if ($warnings > 0)
             {
-                $warning .= '<tr><td colspan="2">This site may not connect to your dashboard or may have other issues. Check your <a href="admin.php?page=MainWPChildServerInformation">MainWP Server Information page</a> to review and <a href="http://docs.mainwp.com/child-site-issues/">check here for more information on possible fixes</a></td><td style="text-align: right;"><a href="#" id="mainwp-child-connect-warning-dismiss">Dismiss</a></td></tr>';
+                $warning .= '<tr><td colspan="2">This site may not connect to your dashboard or may have other issues. Check your <a href="admin.php?page=Main_WP_Child_Server_Information">MainWP Server Information page</a> to review and <a href="http://docs.mainwp.com/child-site-issues/">check here for more information on possible fixes</a></td><td style="text-align: right;"><a href="#" id="mainwp-child-connect-warning-dismiss">Dismiss</a></td></tr>';
             }
 
             if (count($conflicts) > 0) {
@@ -155,13 +155,13 @@ class MainWPChildServerInformation
         ?><div class="wrap">
         <h2><?php _e('Plugin Conflicts'); ?></h2>
         <br/><?php
-        MainWPChildServerInformation::renderConflicts();
+        Main_WP_Child_Server_Information::renderConflicts();
         ?><h2><?php _e('Server Information'); ?></h2><?php
-        MainWPChildServerInformation::render();
+        Main_WP_Child_Server_Information::render();
         ?><h2><?php _e('Cron Schedules'); ?></h2><?php
-        MainWPChildServerInformation::renderCron();
+        Main_WP_Child_Server_Information::renderCron();
         ?><h2><?php _e('Error Log'); ?></h2><?php
-        MainWPChildServerInformation::renderErrorLogPage();
+        Main_WP_Child_Server_Information::renderErrorLogPage();
         ?>
         </div>
         <?php
@@ -218,8 +218,8 @@ class MainWPChildServerInformation
     {               
         $conflicts = self::getConflicts();
         $branding_title = "MainWP";
-        if (MainWPChildBranding::is_branding()) {
-            $branding_title = MainWPChildBranding::get_branding();
+        if (Main_WP_Child_Branding::is_branding()) {
+            $branding_title = Main_WP_Child_Branding::get_branding();
         }
         
         if (count($conflicts) > 0)
@@ -236,7 +236,7 @@ class MainWPChildServerInformation
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
             border-radius: 3px;
-            <?php if (!MainWPChildBranding::is_branding()) { ?>
+            <?php if (!Main_WP_Child_Branding::is_branding()) { ?>
             padding-left: 4.5em;
             background-image: url('<?php echo plugins_url('images/mainwp-icon-orange.png', dirname(__FILE__)); ?>') !important;
             <?php } ?>
@@ -268,7 +268,7 @@ class MainWPChildServerInformation
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
             border-radius: 3px;
-            <?php if (!MainWPChildBranding::is_branding()) { ?>
+            <?php if (!Main_WP_Child_Branding::is_branding()) { ?>
             padding-left: 4.5em;
             background-image: url('<?php echo plugins_url('images/mainwp-icon.png', dirname(__FILE__)); ?>') !important;
             <?php } ?>
@@ -304,8 +304,8 @@ class MainWPChildServerInformation
     public static function render()
     {
         $branding_title = "MainWP Child";
-        if (MainWPChildBranding::is_branding()) {
-            $branding_title = MainWPChildBranding::get_branding();
+        if (Main_WP_Child_Branding::is_branding()) {
+            $branding_title = Main_WP_Child_Branding::get_branding();
         }
         
         ?>
@@ -465,7 +465,7 @@ class MainWPChildServerInformation
                 foreach ($cron_info as $key => $schedule )
                 {
                     ?>
-                    <tr><td><?php echo MainWPHelper::formatTimestamp(MainWPHelper::getTimestamp($time)); ?></td><td><?php echo ((isset($schedule['schedule']) && isset($schedules[$schedule['schedule']]) && isset($schedules[$schedule['schedule']]['display'])) ? $schedules[$schedule['schedule']]['display'] : '');?> </td><td><?php echo $hook; ?></td></tr>
+                    <tr><td><?php echo Main_WP_Helper::formatTimestamp(Main_WP_Helper::getTimestamp($time)); ?></td><td><?php echo ((isset($schedule['schedule']) && isset($schedules[$schedule['schedule']]) && isset($schedules[$schedule['schedule']]['display'])) ? $schedules[$schedule['schedule']]['display'] : '');?> </td><td><?php echo $hook; ?></td></tr>
                     <?php
                 }
             }
@@ -479,15 +479,15 @@ class MainWPChildServerInformation
     protected static function checkDirectoryMainWPDirectory($write = true)
     {       
         $branding_title = "MainWP";
-        if (MainWPChildBranding::is_branding()) {
-            $branding_title = MainWPChildBranding::get_branding();
+        if (Main_WP_Child_Branding::is_branding()) {
+            $branding_title = Main_WP_Child_Branding::get_branding();
         }
         $branding_title .= " upload directory"; 
         
         
         try
         {
-            $dirs = MainWPHelper::getMainWPDir(null, false);
+            $dirs = Main_WP_Helper::getMainWPDir(null, false);
             $path = $dirs[0];
         }
         catch (Exception $e)
@@ -504,7 +504,7 @@ class MainWPChildServerInformation
             else return false;
         }
 
-        $hasWPFileSystem = MainWPHelper::getWPFilesystem();
+        $hasWPFileSystem = Main_WP_Helper::getWPFilesystem();
         global $wp_filesystem;
 
         if ($hasWPFileSystem && !empty($wp_filesystem))
@@ -542,7 +542,7 @@ class MainWPChildServerInformation
         ?>
     <tr>
         <td ></td>
-        <td><?php echo $pName; ?><br/><?php echo (MainWPChildBranding::is_branding()) ? "" : $pDirectory; ?></td>
+        <td><?php echo $pName; ?><br/><?php echo (Main_WP_Child_Branding::is_branding()) ? "" : $pDirectory; ?></td>
         <td><?php echo $pCheck; ?></td>
         <td><?php echo $pResult; ?></td>
         <td><?php echo ($pPassed ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>'); ?></td>
@@ -553,7 +553,7 @@ class MainWPChildServerInformation
 
     protected static function renderRow($pConfig, $pCompare, $pVersion, $pGetter, $pExtraText = '', $pExtraCompare = null, $pExtraVersion = null, $compareFilesize = false)
     {
-        $currentVersion = call_user_func(array('MainWPChildServerInformation', $pGetter));
+        $currentVersion = call_user_func(array('Main_WP_Child_Server_Information', $pGetter));
 
         ?>
     <tr>
@@ -590,7 +590,7 @@ class MainWPChildServerInformation
     
     protected static function check($pCompare, $pVersion, $pGetter, $pExtraCompare = null, $pExtraVersion = null)
     {
-        $currentVersion = call_user_func(array('MainWPChildServerInformation', $pGetter));
+        $currentVersion = call_user_func(array('Main_WP_Child_Server_Information', $pGetter));
 
         return (version_compare($currentVersion, $pVersion, $pCompare) || (($pExtraCompare != null) && version_compare($currentVersion, $pExtraVersion, $pExtraCompare)));
     }

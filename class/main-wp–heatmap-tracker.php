@@ -8,7 +8,7 @@
  * @author Jeffri Hong
  */
 
-class MainWPHeatmapTracker
+class Main_WP_Heatmap_Tracker
 {
 	protected static $instance;
 	protected $server;
@@ -189,7 +189,7 @@ class MainWPHeatmapTracker
 				);
 			}
 		}
-        MainWPHelper::update_option('mainwp_child_click_data', $storeData);
+        Main_WP_Helper::update_option('mainwp_child_click_data', $storeData);
 		// Customize when we need to send the data
 		$this->sendClick();
 		exit;
@@ -239,7 +239,7 @@ class MainWPHeatmapTracker
                             for($i = 1000; $i < count($clickData); $i++ ) {
                                 $saveData[] = $clickData[$i];
                             }
-                            MainWPHelper::update_option('mainwp_child_click_data', $saveData);
+                            Main_WP_Helper::update_option('mainwp_child_click_data', $saveData);
                         } else {
                             delete_option('mainwp_child_click_data');
                         }

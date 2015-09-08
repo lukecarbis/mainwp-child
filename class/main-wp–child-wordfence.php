@@ -1,6 +1,6 @@
 <?php
 
-class MainWPChildWordfence
+class Main_WP_Child_Wordfence
 {   
     public static $instance = null;   
     private static $wfLog = false;
@@ -96,10 +96,10 @@ class MainWPChildWordfence
 
      
     static function Instance() {
-        if (MainWPChildWordfence::$instance == null) {
-            MainWPChildWordfence::$instance = new MainWPChildWordfence();
+        if (Main_WP_Child_Wordfence::$instance == null) {
+            Main_WP_Child_Wordfence::$instance = new Main_WP_Child_Wordfence();
         }
-        return MainWPChildWordfence::$instance;
+        return Main_WP_Child_Wordfence::$instance;
     }    
     
     
@@ -119,7 +119,7 @@ class MainWPChildWordfence
         $information = array();
         if (!class_exists('wordfence') || !class_exists('wfScanEngine')) {
             $information['error'] = 'NO_WORDFENCE';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }   
         if (isset($_POST['mwp_action'])) {
             switch ($_POST['mwp_action']) {
@@ -185,7 +185,7 @@ class MainWPChildWordfence
                 break;            
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
     
     private function start_scan() {  
@@ -208,9 +208,9 @@ class MainWPChildWordfence
     }    
     
     function set_showhide() {
-        MainWPHelper::update_option('mainwp_wordfence_ext_enabled', "Y", 'yes');
+        Main_WP_Helper::update_option('mainwp_wordfence_ext_enabled', "Y", 'yes');
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_wordfence_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_wordfence_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }
@@ -503,7 +503,7 @@ class MainWPChildWordfence
 	}
         
         function save_setting() {
-            MainWPHelper::update_option('mainwp_wordfence_ext_enabled', "Y", 'yes');
+            Main_WP_Helper::update_option('mainwp_wordfence_ext_enabled', "Y", 'yes');
             $settings = unserialize(base64_decode($_POST['settings']));
             if (is_array($settings) && count($settings) > 0) {
                 $result = array();
