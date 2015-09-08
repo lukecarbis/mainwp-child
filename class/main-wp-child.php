@@ -882,7 +882,7 @@ class Main_WP_Child
         }
 		
         // Branding extension
-        Main_WP_Child_Branding::Instance()->branding_init();
+        Main_WP_Child_Branding::instance()->branding_init();
         Main_WP_Client_Report::Instance()->creport_init();
         Main_WP_Child_Pagespeed::Instance()->init();        
         Main_WP_Child_Links_Checker::Instance()->init();
@@ -4034,7 +4034,7 @@ class Main_WP_Child
     }
 	
     public function branding_child_plugin() {		
-        Main_WP_Child_Branding::Instance()->action();
+        Main_WP_Child_Branding::instance()->action();
     }
     
     public function code_snippet() {    
