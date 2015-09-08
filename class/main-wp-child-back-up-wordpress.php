@@ -859,4 +859,3 @@ class Main_WP_Child_Back_Up_WordPress {
 		}
 	}
 }
-
