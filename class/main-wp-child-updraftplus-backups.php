@@ -1,14 +1,14 @@
 <?php
 
-class MainWPChildUpdraftplusBackups
+class Main_WP_Child_Updraftplus_Backups
 {   
     public static $instance = null;   
     
     static function Instance() {        
-        if (MainWPChildUpdraftplusBackups::$instance == null) {
-            MainWPChildUpdraftplusBackups::$instance = new MainWPChildUpdraftplusBackups();
+        if (Main_WP_Child_Updraftplus_Backups::$instance == null) {
+            Main_WP_Child_Updraftplus_Backups::$instance = new Main_WP_Child_Updraftplus_Backups();
         }
-        return MainWPChildUpdraftplusBackups::$instance;
+        return Main_WP_Child_Updraftplus_Backups::$instance;
     }    
     
     public function __construct() {                
@@ -24,7 +24,7 @@ class MainWPChildUpdraftplusBackups
         $information = array();          
         if (!self::isActivatedUpdraftplus()) {
             $information['error'] = 'NO_UPDRAFTPLUS';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }   
         
         global $updraftplus;         
@@ -33,13 +33,13 @@ class MainWPChildUpdraftplusBackups
         }        
         if (empty($updraftplus)) {
             $information['error'] = 'Error empty object';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }
         
         if (isset($_POST['mwp_action'])) {            
             
             if (get_option('mainwp_updraftplus_ext_enabled') !== 'Y')
-                MainWPHelper::update_option('mainwp_updraftplus_ext_enabled', "Y", 'yes');            
+                Main_WP_Helper::update_option('mainwp_updraftplus_ext_enabled', "Y", 'yes');            
             
             switch ($_POST['mwp_action']) {                               
                 case "set_showhide":
@@ -104,12 +104,12 @@ class MainWPChildUpdraftplusBackups
                 break;
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
     
     function set_showhide() {        
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_updraftplus_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_updraftplus_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }
@@ -2791,7 +2791,7 @@ ENDHERE;
         foreach($remove_hooks as $hook_name => $hooks) {
             foreach($hooks as $class_name => $methods) {
                 foreach($methods as $method => $priority) {
-                    MainWPHelper::remove_filters_for_anonymous_class($hook_name, $class_name, $method, $priority);
+                    Main_WP_Helper::remove_filters_for_anonymous_class($hook_name, $class_name, $method, $priority);
                 }
             }
         }  

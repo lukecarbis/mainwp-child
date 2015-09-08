@@ -1,14 +1,14 @@
 <?php
 
-class MainWPChildWPRocket
+class Main_WP_Child_WP_Rocket
 {   
     public static $instance = null;   
     
     public static function Instance() {        
-        if (MainWPChildWPRocket::$instance == null) {
-            MainWPChildWPRocket::$instance = new MainWPChildWPRocket();
+        if (Main_WP_Child_WP_Rocket::$instance == null) {
+            Main_WP_Child_WP_Rocket::$instance = new Main_WP_Child_WP_Rocket();
         }
-        return MainWPChildWPRocket::$instance;
+        return Main_WP_Child_WP_Rocket::$instance;
     }    
     
     public function __construct() {                
@@ -48,7 +48,7 @@ class MainWPChildWPRocket
         );
         foreach($remove_hooks as $hook_name => $hooks) {
             foreach($hooks as $method => $priority) {                
-                MainWPHelper::remove_filters_with_method_name($hook_name, $method, $priority);
+                Main_WP_Helper::remove_filters_with_method_name($hook_name, $method, $priority);
             }
         }  
     }
@@ -109,10 +109,10 @@ class MainWPChildWPRocket
         $information = array();          
         if (!self::isActivated()) {
             $information['error'] = 'NO_WPROCKET';
-            MainWPHelper::write($information);
+            Main_WP_Helper::write($information);
         }   
         if (isset($_POST['mwp_action'])) {            
-            MainWPHelper::update_option('mainwp_wprocket_ext_enabled', "Y"); 
+            Main_WP_Helper::update_option('mainwp_wprocket_ext_enabled', "Y"); 
             switch ($_POST['mwp_action']) {                               
                 case "set_showhide":
                     $information = $this->set_showhide();
@@ -131,12 +131,12 @@ class MainWPChildWPRocket
                 break;
             }        
         }
-        MainWPHelper::write($information);
+        Main_WP_Helper::write($information);
     }
   
     function set_showhide() {
         $hide = isset($_POST['showhide']) && ($_POST['showhide'] === "hide") ? 'hide' : "";
-        MainWPHelper::update_option('mainwp_wprocket_hide_plugin', $hide);        
+        Main_WP_Helper::update_option('mainwp_wprocket_hide_plugin', $hide);        
         $information['result'] = 'SUCCESS';
         return $information;
     }

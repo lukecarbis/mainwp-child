@@ -8,7 +8,7 @@ License: GPLv2
 Author: Vendi Advertising (Chris Haas)
 */
 
-class MainWPChildThemesCheck
+class Main_WP_Child_Themes_Check
 {   
  
     public static $instance = null;  
@@ -26,10 +26,10 @@ class MainWPChildThemesCheck
     private $option_name_last_daily_run = 'mainwp_child_theme_last_daily_run';
     
     public static function Instance() {        
-        if (MainWPChildThemesCheck::$instance === null) {
-            MainWPChildThemesCheck::$instance = new MainWPChildThemesCheck();
+        if (Main_WP_Child_Themes_Check::$instance === null) {
+            Main_WP_Child_Themes_Check::$instance = new Main_WP_Child_Themes_Check();
         }
-        return MainWPChildThemesCheck::$instance;
+        return Main_WP_Child_Themes_Check::$instance;
     }      
 
     public function __construct()
