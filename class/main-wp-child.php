@@ -109,9 +109,7 @@ class Main_WP_Child
         add_action('init', array(&$this, 'localization'));
 
         if (is_admin()) {
-            var_dump(1);
             Main_WP_Helper::update_option('mainwp_child_plugin_version', '2.0.8', 'yes');
-            var_dump(2);
         }
 
         $this->checkOtherAuth();
