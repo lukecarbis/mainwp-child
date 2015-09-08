@@ -331,6 +331,9 @@ class Main_WP_Child_Server_Information {
 		return $fs;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected static function get_file_system_method_check() {
 		$fsmethod = self::get_file_system_method();
 		if ( 'direct' === $fsmethod ) {
@@ -768,91 +771,91 @@ class Main_WP_Child_Server_Information {
 	}
 
 	/**
-	 * @param $pName
-	 * @param $pDirectory
-	 * @param $pCheck
-	 * @param $pResult
-	 * @param $pPassed
+	 * @param $p_name
+	 * @param $p_directory
+	 * @param $p_check
+	 * @param $p_result
+	 * @param $p_passed
 	 *
 	 * @return bool
 	 */
-	protected static function render_directory_row( $pName, $pDirectory, $pCheck, $pResult, $pPassed ) {
+	protected static function render_directory_row( $p_name, $p_directory, $p_check, $p_result, $p_passed ) {
 		?>
 		<tr>
 			<td></td>
-			<td><?php echo wp_kses_post( $pName ); ?><br/><?php echo esc_html( Main_WP_Child_Branding::is_branding() ? '' : $pDirectory ); ?></td>
-			<td><?php echo wp_kses_post( $pCheck ); ?></td>
-			<td><?php echo wp_kses_post( $pResult ); ?></td>
-			<td><?php echo wp_kses_post( $pPassed ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
+			<td><?php echo wp_kses_post( $p_name ); ?><br/><?php echo esc_html( Main_WP_Child_Branding::is_branding() ? '' : $p_directory ); ?></td>
+			<td><?php echo wp_kses_post( $p_check ); ?></td>
+			<td><?php echo wp_kses_post( $p_result ); ?></td>
+			<td><?php echo wp_kses_post( $p_passed ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
 		</tr>
 		<?php
 		return true;
 	}
 
 	/**
-	 * @param $pConfig
-	 * @param $pCompare
-	 * @param $pVersion
-	 * @param $pGetter
-	 * @param string $pExtraText
-	 * @param null $pExtraCompare
-	 * @param null $pExtraVersion
-	 * @param bool|false $compareFilesize
+	 * @param $p_config
+	 * @param $p_compare
+	 * @param $p_version
+	 * @param $p_getter
+	 * @param string $p_extra_text
+	 * @param null $p_extra_compare
+	 * @param null $p_extra_version
+	 * @param bool|false $compare_filesize
 	 */
-	protected static function render_row( $pConfig, $pCompare, $pVersion, $pGetter, $pExtraText = '', $pExtraCompare = null, $pExtraVersion = null, $compareFilesize = false ) {
-		$currentVersion = call_user_func( array( 'Main_WP_Child_Server_Information', $pGetter ) );
+	protected static function render_row( $p_config, $p_compare, $p_version, $p_getter, $p_extra_text = '', $p_extra_compare = null, $p_extra_version = null, $compare_filesize = false ) {
+		$currentVersion = call_user_func( array( 'Main_WP_Child_Server_Information', $p_getter ) );
 		?>
 		<tr>
 			<td></td>
-			<td><?php echo wp_kses_post( $pConfig ); ?></td>
-			<td><?php echo wp_kses_post( $pCompare ); ?>  <?php echo esc_html( true === $pVersion ? 'true' : $pVersion . ' ' . $pExtraText ); ?></td>
+			<td><?php echo wp_kses_post( $p_config ); ?></td>
+			<td><?php echo wp_kses_post( $p_compare ); ?>  <?php echo esc_html( true === $p_version ? 'true' : $p_version . ' ' . $p_extra_text ); ?></td>
 			<td><?php echo wp_kses_post( true === $currentVersion ? 'true' : $currentVersion ); ?></td>
-			<?php if ( $compareFilesize ) : ?>
-			<td><?php echo wp_kses_post( self::filesize_compare( $currentVersion, $pVersion, $pCompare ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
+			<?php if ( $compare_filesize ) : ?>
+			<td><?php echo wp_kses_post( self::filesize_compare( $currentVersion, $p_version, $p_compare ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
 			<?php else : ?>
-			<td><?php echo wp_kses_post( self::check( $pCompare, $pVersion, $pGetter, $pExtraCompare, $pExtraVersion ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
+			<td><?php echo wp_kses_post( self::check( $p_compare, $p_version, $p_getter, $p_extra_compare, $p_extra_version ) ? '<span class="mainwp-pass"><i class="fa fa-check-circle"></i> Pass</span>' : '<span class="mainwp-warning"><i class="fa fa-exclamation-circle"></i> Warning</span>' ); ?></td>
 			<?php endif; ?>
 		</tr>
 		<?php
 	}
 
 	/**
-	 * @param $value1
-	 * @param $value2
+	 * @param $value_1
+	 * @param $value_2
 	 * @param null $operator
 	 *
 	 * @return mixed
 	 */
-	protected static function filesize_compare( $value1, $value2, $operator = null ) {
-		if ( strpos( $value1, 'G' ) !== false ) {
-			$value1 = preg_replace( '/[A-Za-z]/', '', $value1 );
-			$value1 = intval( $value1 ) * 1024; // Megabyte number
+	protected static function filesize_compare( $value_1, $value_2, $operator = null ) {
+		if ( strpos( $value_1, 'G' ) !== false ) {
+			$value_1 = preg_replace( '/[A-Za-z]/', '', $value_1 );
+			$value_1 = intval( $value_1 ) * 1024; // Megabyte number
 		} else {
-			$value1 = preg_replace( '/[A-Za-z]/', '', $value1 ); // Megabyte number
+			$value_1 = preg_replace( '/[A-Za-z]/', '', $value_1 ); // Megabyte number
 		}
 
-		if ( strpos( $value2, 'G' ) !== false ) {
-			$value2 = preg_replace( '/[A-Za-z]/', '', $value2 );
-			$value2 = intval( $value2 ) * 1024; // Megabyte number
+		if ( strpos( $value_2, 'G' ) !== false ) {
+			$value_2 = preg_replace( '/[A-Za-z]/', '', $value_2 );
+			$value_2 = intval( $value_2 ) * 1024; // Megabyte number
 		} else {
-			$value2 = preg_replace( '/[A-Za-z]/', '', $value2 ); // Megabyte number
+			$value_2 = preg_replace( '/[A-Za-z]/', '', $value_2 ); // Megabyte number
 		}
 
-		return version_compare( $value1, $value2, $operator );
+		return version_compare( $value_1, $value_2, $operator );
 	}
 
 	/**
-	 * @param $pCompare
-	 * @param $pVersion
-	 * @param $pGetter
-	 * @param null $pExtraCompare
-	 * @param null $pExtraVersion
+	 * @param $p_compare
+	 * @param $p_version
+	 * @param $p_getter
+	 * @param null $p_extra_compare
+	 * @param null $p_extra_version
 	 *
 	 * @return bool
 	 */
-	protected static function check( $pCompare, $pVersion, $pGetter, $pExtraCompare = null, $pExtraVersion = null ) {
-		$currentVersion = call_user_func( array( 'Main_WP_Child_Server_Information', $pGetter ) );
-		return version_compare( $currentVersion, $pVersion, $pCompare ) || ( ( null !== $pExtraCompare ) && version_compare( $currentVersion, $pExtraVersion, $pExtraCompare ));
+	protected static function check( $p_compare, $p_version, $p_getter, $p_extra_compare = null, $p_extra_version = null ) {
+		$currentVersion = call_user_func( array( 'Main_WP_Child_Server_Information', $p_getter ) );
+		return version_compare( $currentVersion, $p_version, $p_compare ) || ( ( null !== $p_extra_compare ) && version_compare( $currentVersion, $p_extra_version, $p_extra_compare ));
 	}
 
 	/**

@@ -115,11 +115,11 @@ class Main_WP_Child_Pagespeed {
 	 */
 	function update_footer( $text ) {
 		?>
-		 <script>
-			  jQuery(document).ready(function(){
-				  jQuery( '#menu-tools' ).find( 'a[href="tools.php?page=google-pagespeed-insights"]' ).closest( 'li' ).remove();
-			  });        
-		  </script>
+		<script>
+			jQuery(document).ready(function(){
+				jQuery( '#menu-tools' ).find( 'a[href="tools.php?page=google-pagespeed-insights"]' ).closest( 'li' ).remove();
+			});
+		</script>
 		<?php
 		return $text;
 	}
