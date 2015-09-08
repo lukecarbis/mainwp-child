@@ -117,7 +117,7 @@ class Main_WP_Child
         Main_WP_Clone::init();
         Main_WP_Child_Server_Information::init();  
         Main_WP_Client_Report::init();             
-        Main_WP_Child_Plugins_Check::Instance();
+        Main_WP_Child_Plugins_Check::instance();
         Main_WP_Child_Themes_Check::Instance();
         
         $this->run_saved_snippets();
@@ -2494,7 +2494,7 @@ class Main_WP_Child
             if ($days_outdate != $_POST['numberdaysOutdatePluginTheme']) {
                 $days_outdate = $_POST['numberdaysOutdatePluginTheme'];
                 Main_WP_Helper::update_option('mainwp_child_plugintheme_days_outdate', $days_outdate); 
-                Main_WP_Child_Plugins_Check::Instance()->cleanup_deactivation(false);
+                Main_WP_Child_Plugins_Check::instance()->cleanup_deactivation(false);
                 Main_WP_Child_Themes_Check::Instance()->cleanup_deactivation(false);
             }
         }
@@ -2759,7 +2759,7 @@ class Main_WP_Child
         if (isset($last_post) && isset($last_post['post_modified_gmt'])) $information['last_post_gmt'] = strtotime($last_post['post_modified_gmt']);
         $information['mainwpdir'] = (Main_WP_Helper::validateMainWPDir() ? 1 : -1);
         $information['uniqueId'] = get_option('mainwp_child_uniqueId', '');
-        $information['plugins_outdate_info'] = Main_WP_Child_Plugins_Check::Instance()->get_plugins_outdate_info();
+        $information['plugins_outdate_info'] = Main_WP_Child_Plugins_Check::instance()->get_plugins_outdate_info();
         $information['themes_outdate_info'] = Main_WP_Child_Themes_Check::Instance()->get_themes_outdate_info();
         
         if ($exit) Main_WP_Helper::write($information);
